@@ -7,4 +7,7 @@ This plug-in provides great functionality for graphing issues with Chartkick (ht
 * Clone into your plugins folder: <b>git clone https://github.com/masweetman/issue_charts.git</b>
 * Run <b>rake redmine:plugins:migrate RAILS_ENV=production</b>
 * Run <b>bundle install</b>
+* To use groupdate:
+** In config/application.rb, set the time zone to utc: <b>config.active_record.default_timezone = :utc</b>
+** Install time zone support: <b>ttps://github.com/ankane/groupdate#for-mysql</b>
 * Restart Redmine
