@@ -70,7 +70,7 @@ class ChartsController < ApplicationController
   private
 
     def chart_params
-      params.require(:chart).permit(:project_id, :name, :tracker_id, :chart_type, :group_by_field, :group_by_custom_field)
+      params.require(:chart).permit(:project_id, :name, :tracker_id, :chart_type, :group_by_field, :user_id)
     end
 
 end

@@ -4,11 +4,7 @@
     <%= f.text_field :name, :required => true %>
   </p>
   <p>
-    <%= f.label 'Chart type:' %>
-    <%= f.select :chart_type, ['Line', 'Pie', 'Column', 'Bar', 'Area'], { include_blank: true }, :required => true %>
-  </p>
-  <p>
     <%= f.label 'Tracker:' %>
-    <%= f.collection_select :tracker_id, Tracker.order(:name), :id, :name, { include_blank: true }, :required => true %>
+    <%= f.select :tracker_id, tracker_options, include_blank: true %>
   </p>
 </div>
