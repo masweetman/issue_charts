@@ -12,4 +12,4 @@ This plug-in provides great functionality for graphing issues with Chartkick (ht
 == To use groupdate
 
 * In config/application.rb, set the time zone to utc: <b>config.active_record.default_timezone = :utc</b>
-* Install time zone support: <b>ttps://github.com/ankane/groupdate#for-mysql</b>
+* Install time zone support: <b>https://github.com/ankane/groupdate#for-mysql</b>
