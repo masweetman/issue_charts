@@ -1,0 +1,6 @@
+<%= javascript_include_tag 'https://www.google.com/jsapi', 'chartkick' %>
+
+<%= render :partial => 'chart_menu' %>
+
+<h3><%= @chart.name %></h3>
+<%= render_chart(@chart) %>

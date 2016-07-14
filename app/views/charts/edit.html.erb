@@ -1,0 +1,30 @@
+<h2>Edit <%= @chart.name %></h2>
+
+<%= form_for @chart do |f| %>
+<div class='box tabular'>
+  
+  <p>
+    <%= f.label 'Chart name:' %>
+    <%= f.text_field :name, :required => true %>
+  </p>
+  <p>
+    <%= f.label 'Chart type:' %>
+    <%= f.select :chart_type, ['Line', 'Pie', 'Column', 'Bar', 'Area'], { include_blank: true }, :required => true %>
+  </p>
+  <p>
+    <%= f.label 'Group by issue field:' %>
+    <%= f.select :group_by_field, { 'Category' => 'category', 'Status' => 'status', 'Assigned to' => 'assigned_to', 'Author' => 'author', 'Created on' => 'created_on' }, include_blank: true %>
+  </p>
+  <% if @chart.tracker_id? %>
+  <p>
+    <%= f.label 'Group by issue custom field:' %>
+    <%= f.collection_select :group_by_custom_field, Tracker.find(@chart.tracker_id).custom_fields.order(:name), :id, :name, include_blank: true %>
+  </p>
+  <% end %>
+</div>
+<div class='box tabular'>
+
+<p>
+  <%= f.submit 'Save' %>
+</p>
+<% end %>

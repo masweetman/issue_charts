@@ -1,0 +1,4 @@
+<div class="contextual">
+  <%= link_to 'Edit', edit_chart_path(@chart), :class => 'icon icon-edit' %>
+  <%= link_to 'Delete', chart_path(@chart), :method => :delete, :data => {:confirm => l(:text_are_you_sure)} ,:class => 'icon icon-del' %>
+</div>

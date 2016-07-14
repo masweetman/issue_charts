@@ -1,0 +1,13 @@
+<div class='box tabular'>
+  <p>Select one:</p>
+  <p>
+    <%= f.label 'Group by issue field:' %>
+    <%= f.select :group_by_field, { 'Category' => 'category', 'Status' => 'status', 'Assigned to' => 'assigned_to', 'Author' => 'author', 'Created on' => 'created_on' }, include_blank: true %>
+  </p>
+  <% if @chart.tracker_id? %>
+  <p>
+    <%= f.label 'Group by issue custom field:' %>
+    <%= f.collection_select :group_by_custom_field, Tracker.find(@chart.tracker_id).custom_fields.order(:name), :id, :name, include_blank: true %>
+  </p>
+  <% end %>
+</div>

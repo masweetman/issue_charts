@@ -1,0 +1,14 @@
+<div class='box tabular'>
+  <p>
+    <%= f.label 'Chart name:' %>
+    <%= f.text_field :name, :required => true %>
+  </p>
+  <p>
+    <%= f.label 'Chart type:' %>
+    <%= f.select :chart_type, ['Line', 'Pie', 'Column', 'Bar', 'Area'], { include_blank: true }, :required => true %>
+  </p>
+  <p>
+    <%= f.label 'Tracker:' %>
+    <%= f.collection_select :tracker_id, Tracker.order(:name), :id, :name, { include_blank: true }, :required => true %>
+  </p>
+</div>

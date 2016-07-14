@@ -1,0 +1,19 @@
+= Issue Charts plug-in
+
+This plug-in provides great functionality for graphing issues with Chartkick (http://chartkick.com/)
+
+== Installation
+
+From a ZIP file:
+
+* Download the latest version of the plugin
+* Unzip to */plugins*
+
+From a GIT repository:
+
+* Clone repository with <b>git clone https://github.com/masweetman/issue_charts.git</b> command
+
+After download:
+
+* Run <b>rake redmine:plugins:migrate</b>
+* Restart Redmine

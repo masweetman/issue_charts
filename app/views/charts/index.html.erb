@@ -1,0 +1,12 @@
+<%= javascript_include_tag 'https://www.google.com/jsapi', 'chartkick' %>
+
+<%= render :partial => 'action_menu' %>
+
+<h2>Charts</h2>
+
+<% @charts.each do |chart| %>
+  <div class="<%= cycle("splitcontentleft", "splitcontentright") %>">
+    <h3><%= link_to chart.name, chart_path(chart) %></h3>
+    <%= render_chart(chart) %>
+  </div>
+<% end %>
