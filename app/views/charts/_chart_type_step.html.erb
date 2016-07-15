@@ -3,8 +3,14 @@
     <%= f.label 'Chart name:' %>
     <%= f.text_field :name, :required => true %>
   </p>
+  <% if User.current.allowed_to?(:create_public_charts, @project) %>
+  <p>
+    <%= f.check_box :public %>
+    <%= f.label 'Public chart' %>
+  </p>
+  <% end %>
   <p>
     <%= f.label 'Tracker:' %>
-    <%= f.select :tracker_id, tracker_options, include_blank: true %>
+    <%= f.select :tracker_id, tracker_options, include_blank: true, :required => true %>
   </p>
 </div>

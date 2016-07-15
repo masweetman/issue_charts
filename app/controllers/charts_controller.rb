@@ -3,13 +3,19 @@ class ChartsController < ApplicationController
 
   def index
     @project = Project.find(params[:project_id])
-  	@charts = Chart.where(:project_id => @project.id).order(:name)
+  	@charts = Chart.where('project_id = ? AND (user_id = ? OR public = true)', @project.id, User.current.id).order(:name)
+    if !User.current.allowed_to?(:view_charts, @project)
+      render_404
+    end
   end
 
   def show
     session[:return_to] = request.referer
     @chart = Chart.find(params[:id])
     @project = Project.find(@chart.project_id)
+    if !User.current.allowed_to?(:view_charts, @project)
+      render_404
+    end
   end
 
   def new
@@ -17,6 +23,9 @@ class ChartsController < ApplicationController
     session[:chart_params] ||= {}
     @chart = Chart.new(session[:chart_params])
     @chart.current_step = session[:chart_step]
+    if !(User.current.allowed_to?(:create_charts, @project) || User.current.allowed_to?(:create_public_charts, @project))
+      render_404
+    end
   end
 
   def create
@@ -44,6 +53,9 @@ class ChartsController < ApplicationController
     session[:chart_params] ||= {}
     @chart = Chart.find(params[:id])
     @project = Project.find(@chart.project_id)
+    if !(User.current.allowed_to?(:edit_charts, @project) || User.current.allowed_to?(:edit_public_charts, @project))
+      render_404
+    end
   end
 
   def update
@@ -58,19 +70,19 @@ class ChartsController < ApplicationController
 
   def destroy
     @chart = Chart.find(params[:id])
+    @project = Project.find(@chart.project_id)
     @chart.destroy
     redirect_to session.delete(:return_to)
     flash[:notice] = l(:notice_successful_delete)
-  end
-
-  def tracker_custom_fields(tracker_id)
-    Tracker.find(tracker_id).custom_fields.order(:name)
+    if !(User.current.allowed_to?(:edit_charts, @project) || User.current.allowed_to?(:edit_public_charts, @project))
+      render_404
+    end
   end
 
   private
 
     def chart_params
-      params.require(:chart).permit(:project_id, :name, :tracker_id, :chart_type, :group_by_field, :user_id)
+      params.require(:chart).permit(:project_id, :name, :tracker_id, :chart_type, :group_by_field, :user_id, :public)
     end
 
 end

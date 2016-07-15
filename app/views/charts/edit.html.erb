@@ -7,6 +7,12 @@
     <%= f.label 'Chart name:' %>
     <%= f.text_field :name, :required => true %>
   </p>
+  <% if User.current.allowed_to?(:create_public_charts, @project) %>
+  <p>
+    <%= f.check_box :public %>
+    <%= f.label 'Public chart' %>
+  </p>
+  <% end %>
   <p>
     <%= f.label 'Chart type:' %>
     <%= f.select :chart_type, chart_type_options, { include_blank: true }, :required => true %>
