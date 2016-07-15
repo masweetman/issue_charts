@@ -15,6 +15,6 @@
   <% end %>
   <p>
     <%= f.label 'Tracker:' %>
-    <%= f.select :tracker_id, tracker_options, include_blank: true, :required => true %>
+    <%= f.select :tracker_id, tracker_options, { include_blank: true }, :required => true %>
   </p>
 </div>

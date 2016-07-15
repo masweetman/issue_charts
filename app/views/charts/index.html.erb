@@ -2,11 +2,32 @@
 
 <%= render :partial => 'action_menu' %>
 
-<h2>Charts</h2>
+<h2>My Charts</h2>
 
-<% @charts.each do |chart| %>
-  <div class="<%= cycle("splitcontentleft", "splitcontentright") %>">
-    <h3><%= link_to chart.name, chart_path(chart) %></h3>
-    <%= render_chart(chart) %>
+  <div class="splitcontent" style="overflow:hidden;">
+    <% @my_charts.each do |chart| %>
+      <div class="<%= cycle("splitcontentleft", "splitcontentright") %>">
+        <h3><%= link_to chart.name, chart_path(chart) %></h3>
+        <%= Tracker.find(chart.tracker_id).name + ' trackers' if chart.tracker_id > 0 %>
+        <%= 'All trackers' if chart.tracker_id == 0 %>
+        created in the last
+        <%= chart.range_integer.to_s + ' ' + chart.range_type %>
+        <%= render_chart(chart) %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+
+<h2>Public Charts</h2>
+
+  <div class="splitcontent" style="overflow:hidden;">
+    <% @public_charts.each do |chart| %>
+      <div class="<%= cycle("splitcontentleft", "splitcontentright") %>">
+        <h3><%= link_to chart.name, chart_path(chart) %></h3>
+        <%= Tracker.find(chart.tracker_id).name + ' trackers' if chart.tracker_id > 0 %>
+        <%= 'All trackers' if chart.tracker_id == 0 %>
+        created in the last
+        <%= chart.range_integer.to_s + ' ' + chart.range_type %>
+        <%= render_chart(chart) %>
+      </div>
+    <% end %>
+  </div>

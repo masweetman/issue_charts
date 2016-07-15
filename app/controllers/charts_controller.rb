@@ -3,7 +3,8 @@ class ChartsController < ApplicationController
 
   def index
     @project = Project.find(params[:project_id])
-  	@charts = Chart.where('project_id = ? AND (user_id = ? OR public = true)', @project.id, User.current.id).order(:name)
+    @my_charts = Chart.where('project_id = ? AND user_id = ? AND public = false', @project.id, User.current.id).order(:name)
+    @public_charts = Chart.where('project_id = ? AND public = true', @project.id).order(:name)
     if !User.current.allowed_to?(:view_charts, @project)
       render_404
     end
