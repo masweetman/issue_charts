@@ -19,8 +19,8 @@ class ChartsController < ApplicationController
   end
 
   def new
-    @project = Project.find(params[:project_id])
     session[:chart_params] ||= {}
+    @project = Project.find(params[:project_id])
     @chart = Chart.new(session[:chart_params])
     @chart.current_step = session[:chart_step]
     if !(User.current.allowed_to?(:create_charts, @project) || User.current.allowed_to?(:create_public_charts, @project))
@@ -50,7 +50,6 @@ class ChartsController < ApplicationController
   end
 
   def edit
-    session[:chart_params] ||= {}
     @chart = Chart.find(params[:id])
     @project = Project.find(@chart.project_id)
     if !(User.current.allowed_to?(:edit_charts, @project) || User.current.allowed_to?(:edit_public_charts, @project))
@@ -60,6 +59,7 @@ class ChartsController < ApplicationController
 
   def update
     @chart = Chart.find(params[:id])
+    @project = Project.find(@chart.project_id)
     if @chart.update_attributes(chart_params)
       redirect_to session.delete(:return_to)
       flash[:notice] = l(:notice_successful_update)
@@ -82,7 +82,7 @@ class ChartsController < ApplicationController
   private
 
     def chart_params
-      params.require(:chart).permit(:project_id, :name, :tracker_id, :chart_type, :group_by_field, :user_id, :public)
+      params.require(:chart).permit(:project_id, :name, :tracker_id, :chart_type, :group_by_field, :user_id, :public, :range_integer, :range_type)
     end
 
 end

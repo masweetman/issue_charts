@@ -14,14 +14,17 @@
   </p>
   <% end %>
   <p>
-    <%= f.label 'Chart type:' %>
-    <%= f.select :chart_type, chart_type_options, { include_blank: true }, :required => true %>
+    <%= f.label 'Range:' %>
+    <%= f.text_field :range_integer, :required => true %>
+    <%= f.select :range_type, { 'Days' => 'days', 'Months' => 'months', 'Years' => 'years' }, include_blank: false %>
   </p>
-  <p>
-    <%= f.label 'Group by issue field:' %>
-    <%= f.select :group_by_field, group_by_field_options(@chart.tracker_id), include_blank: true unless @chart.tracker_id == 0 %>
-    <%= f.select :group_by_field, { 'Tracker' => 'tracker' }.merge(standard_fields), include_blank: true if @chart.tracker_id == 0 %>
-  </p>
+  <% unless @chart.predefined? %>
+    <p>
+      <%= f.label 'Group by issue field:' %>
+      <%= f.select :group_by_field, group_by_field_options(@chart.tracker_id), include_blank: true, :required => true unless @chart.tracker_id == 0 %>
+      <%= f.select :group_by_field, { 'Tracker' => 'tracker' }.merge(standard_fields), include_blank: true, :required => true if @chart.tracker_id == 0 %>
+    </p>
+  <% end %>
 </div>
 
 <p>

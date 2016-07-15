@@ -1,5 +1,6 @@
 class Chart < ActiveRecord::Base
   attr_writer :current_step
+  include ChartsHelper
 
   def current_step
     @current_step || steps.first
@@ -15,6 +16,10 @@ class Chart < ActiveRecord::Base
 
   def last_step?
   	current_step == steps.last
+  end
+
+  def predefined?
+    predefined_types.include? chart_type
   end
 
 end
