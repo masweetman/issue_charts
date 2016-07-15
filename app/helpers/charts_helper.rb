@@ -20,30 +20,57 @@ module ChartsHelper
 
   def group_by_field_options(tracker_id)
     options = standard_fields
-    Tracker.find(tracker_id).custom_fields.order(:name).map{ |cf| options[cf.name] = cf.id.to_s }
+    group_by_custom_field_options(tracker_id).map{ |cf| options[cf.name] = cf.id.to_s }
     return options
   end
 
-  def render_chart(chart)
-    
-    date_range = nil
-    date_range = eval("Date.today - chart.range_integer." + chart.range_type) unless chart.range_integer.nil? || chart.range_type.nil?
-    if chart.predefined?
-      if chart.tracker_id == 0
-        scope = Issue.where('project_id = ? AND created_on > ?', chart.project_id, date_range)
-      else
-        scope = Issue.where('project_id = ? AND tracker_id = ? AND created_on > ?', chart.project_id, chart.tracker_id, date_range)
-      end
+  def group_by_custom_field_options(tracker_id)
+    return Tracker.find(tracker_id).custom_fields.order(:name)
+  end
+
+  def chart_start_date(chart)
+    eval("Date.today - chart.range_integer." + chart.range_type) unless chart.range_integer.nil? || chart.range_type.nil?
+  end
+
+  def issue_scope(chart)
+    start_date = chart_start_date(chart)
+    if chart.tracker_id == 0
+      scope = Issue.where('project_id = ? AND created_on > ?', chart.project_id, start_date)
     else
+      scope = Issue.where('project_id = ? AND tracker_id = ? AND created_on > ?', chart.project_id, chart.tracker_id, start_date)
+    end
+  end
+
+  def render_link_objects(chart)
+    objects = []
+    if ('0' + chart.group_by_field.to_s).to_i > 0
+      return nil
+    else
+      scope = issue_scope(chart)
+      objects = scope.map{ |i| eval("i." + chart.group_by_field.to_s) }.uniq.compact.sort unless chart.group_by_field.to_s == 'created_on'
+    end
+    return objects
+  end
+
+  def chart_issues_path(chart, object)
+    code = "project_issues_path(Project.find(" + chart.project_id.to_s + "), :set_filter => 1,"
+    code += " :tracker_id => " + chart.tracker_id.to_s + "," if chart.tracker_id > 0
+    code += " :status_id => '*'," unless chart.group_by_field.to_s == 'status'
+    code += " :" + chart.group_by_field.to_s + "_id => " + object.class.name + ".find('" + object.id.to_s + "'))"
+    eval code
+  end
+
+  def render_chart(chart)
+    start_date = chart_start_date(chart)
+    if ('0' + chart.group_by_field.to_s).to_i > 0
+      scope = CustomValue.where("customized_type = ? AND custom_field_id = ?", 'Issue', chart.group_by_field).joins("INNER JOIN issues ON (custom_values.customized_id = issues.id)").where("project_id = ? AND tracker_id = ? AND created_on > ?", chart.project_id, chart.tracker_id, start_date)
+      group = 'value'
+    else
+      scope = issue_scope(chart)
       group = chart.group_by_field
-      if chart.tracker_id == 0
-        scope = Issue.where('project_id = ? AND created_on > ?', chart.project_id, date_range)
-      elsif standard_fields.values.include? chart.group_by_field
-        scope = Issue.where('project_id = ? AND tracker_id = ? AND created_on > ?', chart.project_id, chart.tracker_id, date_range)
-      elsif group_by_field_options(chart.tracker_id).values.include? chart.group_by_field
-        scope = CustomValue.where("customized_type = ? AND custom_field_id = ?", 'Issue', chart.group_by_field).joins("INNER JOIN issues ON (custom_values.customized_id = issues.id)").where("project_id = ? AND tracker_id = ? AND created_on > ?", chart.project_id, chart.tracker_id, date_range)
-        group = 'value'
-      end
+    end
+
+    if !chart.predefined?
       chart_code = ''
       if chart.chart_type == 'Line'
         chart_code = 'line_chart'
@@ -63,9 +90,8 @@ module ChartsHelper
         group_code = 'group'
       end
       code = chart_code + ' scope.' + group_code + '(group).count'
-    end
-    
-    if chart.chart_type == 'Created vs Closed Issues'
+
+    elsif chart.chart_type == 'Created vs Closed Issues'
       created_issues = 0
       closed_issues = 0
       created_series = {}

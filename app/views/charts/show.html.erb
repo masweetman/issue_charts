@@ -10,3 +10,22 @@ created in the last
 <%= @chart.range_integer.to_s + ' ' + @chart.range_type %>
 
 <%= render_chart(@chart) %>
+
+<% if standard_fields.values.include? @chart.group_by_field %>
+  <% objects = render_link_objects(@chart) %>
+  <table class="list issue-report">
+    <thead>
+      <tr>
+      	<th>Issues by field value:</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% objects.each do |o| %>
+      <tr class="<%= cycle("odd", "even") %>">
+      	<td class="name"><%= link_to o.name, chart_issues_path(@chart, o) %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% end %>
+
