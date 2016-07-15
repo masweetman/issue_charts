@@ -1,6 +1,6 @@
 = Issue Charts plug-in
 
-This plug-in provides great functionality for graphing issues with Chartkick (http://chartkick.com/)
+This plugin provides the capability to create beautiful charts and graphs for your issues using Chartkick (http://chartkick.com). Create issue visualizations based on standard fields as well as custom fields!
 
 == Installation
 
