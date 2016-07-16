@@ -3,15 +3,15 @@ class ChartsController < ApplicationController
 
   def index
     @project = Project.find(params[:project_id])
-    @my_charts = Chart.where('project_id = ? AND user_id = ? AND public = false', @project.id, User.current.id).order(:name)
-    @public_charts = Chart.where('project_id = ? AND public = true', @project.id).order(:name)
     if !User.current.allowed_to?(:view_charts, @project)
       render_404
+    else
+      @my_charts = Chart.where('project_id = ? AND user_id = ? AND public = false', @project.id, User.current.id).order(:name)
+      @public_charts = Chart.where('project_id = ? AND public = true', @project.id).order(:name)
     end
   end
 
   def show
-    session[:return_to] = request.referer
     @chart = Chart.find(params[:id])
     @project = Project.find(@chart.project_id)
     if !User.current.allowed_to?(:view_charts, @project)
@@ -22,10 +22,11 @@ class ChartsController < ApplicationController
   def new
     session[:chart_params] ||= {}
     @project = Project.find(params[:project_id])
-    @chart = Chart.new(session[:chart_params])
-    @chart.current_step = session[:chart_step]
     if !(User.current.allowed_to?(:create_charts, @project) || User.current.allowed_to?(:create_public_charts, @project))
       render_404
+    else
+      @chart = Chart.new(session[:chart_params])
+      @chart.current_step = session[:chart_step]
     end
   end
 
@@ -46,7 +47,7 @@ class ChartsController < ApplicationController
     else
       session.delete(:chart_step)
       session.delete(:chart_params)
-      redirect_to @chart
+      redirect_to action: 'show', id: @chart.id
     end
   end
 
@@ -62,21 +63,22 @@ class ChartsController < ApplicationController
     @chart = Chart.find(params[:id])
     @project = Project.find(@chart.project_id)
     if @chart.update_attributes(chart_params)
-      redirect_to session.delete(:return_to)
+      redirect_to action: 'show', id: @chart.id
       flash[:notice] = l(:notice_successful_update)
     else
-      render 'edit'
+      redirect_to action: 'edit', id: @chart.id
     end
   end
 
   def destroy
     @chart = Chart.find(params[:id])
     @project = Project.find(@chart.project_id)
-    @chart.destroy
-    redirect_to session.delete(:return_to)
-    flash[:notice] = l(:notice_successful_delete)
     if !(User.current.allowed_to?(:edit_charts, @project) || User.current.allowed_to?(:edit_public_charts, @project))
       render_404
+    else
+      @chart.destroy
+      redirect_to action: 'index', project_id: @project.id
+      flash[:notice] = l(:notice_successful_delete)
     end
   end
 
