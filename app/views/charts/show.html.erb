@@ -13,6 +13,7 @@ created in the last
 
 <% if standard_fields.values.include? @chart.group_by_field %>
   <% objects = render_link_objects(@chart) %>
+  <% unless objects.empty? %>
   <table class="list issue-report">
     <thead>
       <tr>
@@ -27,5 +28,6 @@ created in the last
     <% end %>
     </tbody>
   </table>
+  <% end %>
 <% end %>
 
