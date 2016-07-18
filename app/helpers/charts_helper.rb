@@ -109,7 +109,19 @@ module ChartsHelper
           closed_issues += 1
           closed_series[issue.closed_on.to_date] = closed_issues
         end
-        code = "line_chart [ { name: 'Created Issues', data: created_series }, { name: 'Closed Issues', data: closed_series } ], max: created_issues"
+
+        closed_series.each do |cl|
+          unless created_series.include? cl[0]
+            created_series[cl[0]] = created_series.each.select{ |i| i[0] < cl[0] }.max.to_a[1].to_i
+          end
+        end
+        created_series.each do |cr|
+          unless closed_series.include? cr[0]
+            closed_series[cr[0]] = closed_series.each.select{ |i| i[0] < cr[0] }.max.to_a[1].to_i
+          end
+        end
+
+        code = "area_chart [ { name: 'Created Issues', data: created_series }, { name: 'Closed Issues', data: closed_series } ], stacked: false, max: created_issues*1.1, colors: ['#f00', '#0f0']"
       end
 
       eval code
