@@ -121,7 +121,7 @@ module ChartsHelper
           end
         end
 
-        code = "area_chart [ { name: 'Created Issues', data: created_series }, { name: 'Closed Issues', data: closed_series } ], stacked: false, max: created_issues*1.1, colors: ['#f00', '#0f0']"
+        code = "area_chart [ { name: 'Created Issues', data: created_series }, { name: 'Closed Issues', data: closed_series } ], stacked: false, max: created_issues*1.1, colors: ['red', '#0a0']"
       end
 
       eval code
