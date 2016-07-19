@@ -11,19 +11,19 @@ created in the last
 
 <%= render_chart(@chart) %>
 
-<% if standard_fields.values.include? @chart.group_by_field %>
+<% if { 'Tracker' => 'tracker' }.merge(standard_fields).values.include? @chart.group_by_field %>
   <% objects = render_link_objects(@chart) %>
   <% unless objects.empty? %>
   <table class="list issue-report">
     <thead>
       <tr>
-      	<th>Issues by field value:</th>
+        <th>Issues by field value:</th>
       </tr>
     </thead>
     <tbody>
     <% objects.each do |o| %>
       <tr class="<%= cycle("odd", "even") %>">
-      	<td class="name"><%= link_to o.name, chart_issues_path(@chart, o) %></td>
+        <td class="name"><%= link_to o.name, chart_issues_path(@chart, o) %></td>
       </tr>
     <% end %>
     </tbody>

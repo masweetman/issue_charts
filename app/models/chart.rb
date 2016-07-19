@@ -7,7 +7,7 @@ class Chart < ActiveRecord::Base
   end
 
   def next_step
-  	self.current_step = steps[steps.index(current_step)+1]
+    self.current_step = steps[steps.index(current_step)+1]
   end
 
   def steps
@@ -15,7 +15,7 @@ class Chart < ActiveRecord::Base
   end
 
   def last_step?
-  	current_step == steps.last
+    current_step == steps.last
   end
 
   def predefined?
