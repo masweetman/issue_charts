@@ -52,16 +52,42 @@ module ChartsHelper
     return objects
   end
 
-  def chart_issues_path(chart, object)
+  def chart_issues_path(chart, object_id, status)
     begin
-      code = "project_issues_path(Project.find(" + chart.project_id.to_s + "), :set_filter => 1,"
-      code += " :tracker_id => " + chart.tracker_id.to_s + "," if chart.tracker_id > 0
-      code += " :status_id => '*'," unless chart.group_by_field.to_s == 'status'
-      code += " :" + chart.group_by_field.to_s + "_id => " + object.class.name + ".find('" + object.id.to_s + "'))"
-      eval code
+      if chart.group_by_field == 'status'
+        status_op = '='
+      else
+        status_op = status
+      end
+      if chart.tracker_id > 0
+        project_issues_path(Project.find(chart.project_id), :set_filter => 1,
+          :f=>[:status_id, :tracker_id, :created_on, chart.group_by_field.to_s + '_id'],
+          :op=>{:status_id => status_op, :tracker_id => '=', :created_on => '>=', chart.group_by_field.to_s + '_id' => '='},
+          :v=>{:tracker_id => [chart.tracker_id.to_s], :created_on => [chart_start_date(chart).to_s], chart.group_by_field.to_s + '_id' => [object_id.to_s]},
+          )
+      elsif chart.tracker_id == 0
+        project_issues_path(Project.find(chart.project_id), :set_filter => 1,
+          :f=>[:status_id, :created_on, chart.group_by_field.to_s + '_id'],
+          :op=>{:status_id => status_op, :created_on => '>=', chart.group_by_field.to_s + '_id' => '='},
+          :v=>{:created_on => [chart_start_date(chart).to_s], chart.group_by_field.to_s + '_id' => [object_id.to_s]},
+          )
+      end
     rescue Exception => e
       flash[:error] = "Error loading links for chart '" + chart.name + "'. " + e.message
     end
+  end
+
+  def chart_issues_count(chart, object_id, status)
+    query = chart.group_by_field.to_s + '_id = ?'
+    scope = issue_scope(chart).where(query, object_id)
+    if status == 'o'
+      count = scope.open.count
+    elsif status == '*'
+      count = scope.count
+    elsif status == 'c'
+      count = scope.count - scope.open.count
+    end
+    return count
   end
 
   def render_chart(chart)

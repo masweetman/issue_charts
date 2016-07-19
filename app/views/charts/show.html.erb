@@ -17,13 +17,19 @@ created in the last
   <table class="list issue-report">
     <thead>
       <tr>
-        <th>Issues by field value:</th>
+        <th></th>
+        <th>Open</th>
+        <th>Closed</th>
+        <th>Total</th>
       </tr>
     </thead>
     <tbody>
     <% objects.each do |o| %>
       <tr class="<%= cycle("odd", "even") %>">
-        <td class="name"><%= link_to o.name, chart_issues_path(@chart, o) %></td>
+        <td class="name"><%= link_to o.name, chart_issues_path(@chart, o.id, '*') %></td>
+        <td><%= link_to chart_issues_count(@chart, o.id, 'o'), chart_issues_path(@chart, o.id, 'o') %></td>
+        <td><%= link_to chart_issues_count(@chart, o.id, 'c'), chart_issues_path(@chart, o.id, 'c') %></td>
+        <td><%= link_to chart_issues_count(@chart, o.id, '*'), chart_issues_path(@chart, o.id, '*') %></td>
       </tr>
     <% end %>
     </tbody>
