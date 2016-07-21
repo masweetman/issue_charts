@@ -4,8 +4,8 @@
 
 <h2><%= @chart.name %></h2>
 
-<%= Tracker.find(@chart.tracker_id).name + ' trackers' if @chart.tracker_id > 0 %>
-<%= 'All trackers' if @chart.tracker_id == 0 %>
+<%= Tracker.find(@chart.tracker_id).name + ' issues' if @chart.tracker_id > 0 %>
+<%= 'All issues' if @chart.tracker_id == 0 %>
 created in the last
 <%= @chart.range_integer.to_s + ' ' + @chart.range_type %>
 
