@@ -1,5 +1,6 @@
 en:
   label_charts: Charts
+  field_chart_type: Chart type
   label_month_plural: months
   label_year_plural: years
   label_n_days:

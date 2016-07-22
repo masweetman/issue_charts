@@ -4,7 +4,7 @@
     <%= f.text_field :name, :required => true %>
   </p>
   <p>
-    <%= f.label l(:field_type) %>
+    <%= f.label l(:field_chart_type) %>
     <%= f.select :chart_type, chart_type_options, { include_blank: true }, :required => true %>
   </p>
   <% if User.current.allowed_to?(:create_public_charts, @project) %>
