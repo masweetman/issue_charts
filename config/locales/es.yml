@@ -1,0 +1,28 @@
+es:
+  label_charts: Gráﬁcas
+  label_month_plural: meses
+  label_year_plural: años
+  label_n_days:
+    one: "1 día"
+    other: "%{count} días"
+  label_n_months:
+    one: "1 mes"
+    other: "%{count} meses"
+  label_n_years:
+    one: "1 año"
+    other: "%{count} años"
+  label_new_chart: Nueva gráﬁca
+  label_my_charts: Mis gráﬁcas
+  label_public_charts: Gráﬁcas públicas
+  label_line_chart: Línea
+  label_pie_chart: Circular
+  label_column_chart: Columnas
+  label_bar_chart: Barras
+  label_area_chart: Área
+  label_created_vs_closed_issues: Todas las peticiones y peticiones cerrados
+
+  permission_view_charts: Ver gráﬁcas
+  permission_create_charts: Crear gráﬁcas
+  permission_create_public_charts: Crear gráﬁcas públicas
+  permission_edit_charts: Editar gráﬁcas
+  permission_edit_public_charts: Editar gráﬁcas públicas

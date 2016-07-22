@@ -1,11 +1,16 @@
-# English strings go here for Rails i18n
 en:
   label_charts: Charts
   label_month_plural: months
   label_year_plural: years
-  label_n_days: "last %{count} days"
-  label_n_months: "last %{count} months"
-  label_n_years: "last %{count} years"
+  label_n_days:
+    one: "last 1 day"
+    other: "last %{count} days"
+  label_n_months:
+    one: "last 1 month"
+    other: "last %{count} months"
+  label_n_years:
+    one: "last 1 year"
+    other: "last %{count} years"
   label_new_chart: New chart
   label_my_charts: My charts
   label_public_charts: Public charts
