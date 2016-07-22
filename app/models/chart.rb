@@ -19,7 +19,7 @@ class Chart < ActiveRecord::Base
   end
 
   def predefined?
-    predefined_types.include? chart_type
+    predefined_types.values.include? chart_type
   end
 
 end

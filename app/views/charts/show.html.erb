@@ -4,23 +4,24 @@
 
 <h2><%= @chart.name %></h2>
 
-<%= Tracker.find(@chart.tracker_id).name + ' issues' if @chart.tracker_id > 0 %>
-<%= 'All issues' if @chart.tracker_id == 0 %>
-created in the last
-<%= @chart.range_integer.to_s + ' ' + @chart.range_type %>
+<%= Tracker.find(@chart.tracker_id).name.pluralize if @chart.tracker_id > 0 %>
+<%= l(:label_issues_visibility_all) if @chart.tracker_id == 0 %>
+<%= '(' + l(:label_n_days, count: @chart.range_integer) + ')' if @chart.range_type == 'days' %>
+<%= '(' + l(:label_n_months, count: @chart.range_integer) + ')' if @chart.range_type == 'months' %>
+<%= '(' + l(:label_n_years, count: @chart.range_integer) + ')' if @chart.range_type == 'years' %>
 
 <%= render_chart(@chart) %>
 
-<% if { 'Tracker' => 'tracker' }.merge(standard_fields).values.include? @chart.group_by_field %>
+<% if { l(:field_tracker) => 'tracker' }.merge(standard_fields).values.include? @chart.group_by_field %>
   <% objects = render_link_objects(@chart) %>
   <% unless objects.empty? %>
   <table class="list issue-report">
     <thead>
       <tr>
         <th></th>
-        <th>Open</th>
-        <th>Closed</th>
-        <th>Total</th>
+        <th><%=l(:label_open_issues_plural)%></th>
+        <th><%=l(:label_closed_issues_plural)%></th>
+        <th><%=l(:label_total)%></th>
       </tr>
     </thead>
     <tbody>

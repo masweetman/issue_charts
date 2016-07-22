@@ -1,15 +1,15 @@
 <div class='box tabular'>
 
   <p>
-    <%= f.label 'Range:' %>
+    <%= f.label l(:label_in_the_past_days) %>
     <%= f.text_field :range_integer, :required => true %>
-    <%= f.select :range_type, { 'Days' => 'days', 'Months' => 'months', 'Years' => 'years' }, include_blank: false %>
+    <%= f.select :range_type, { l(:label_day_plural) => 'days', l(:label_month_plural) => 'months', l(:label_year_plural) => 'years' }, include_blank: false %>
   </p>
   <% unless @chart.predefined? %>
     <p>
-      <%= f.label 'Group by issue field:' %>
+      <%= f.label l(:field_group_by) %>
       <%= f.select :group_by_field, group_by_field_options(@chart.tracker_id), include_blank: true, :required => true unless @chart.tracker_id == 0 %>
-      <%= f.select :group_by_field, { 'Tracker' => 'tracker' }.merge(standard_fields), include_blank: true, :required => true if @chart.tracker_id == 0 %>
+      <%= f.select :group_by_field, { l(:field_tracker) => 'tracker' }.merge(standard_fields), include_blank: true, :required => true if @chart.tracker_id == 0 %>
     </p>
   <% end %>
 

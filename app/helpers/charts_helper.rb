@@ -1,19 +1,23 @@
 module ChartsHelper
 
   def chart_type_options
-    return ['Line', 'Pie', 'Column', 'Bar', 'Area'] + predefined_types
+    return { l(:label_line_chart) => 'Line',
+      l(:label_pie_chart) => 'Pie',
+      l(:label_column_chart) => 'Column',
+      l(:label_bar_chart) => 'Bar',
+      l(:label_area_chart) => 'Area'}.merge(predefined_types)
   end
 
   def predefined_types
-    return ['Created vs Closed Issues']
+    return { l(:label_created_vs_closed_issues) => 'Created vs Closed Issues' }
   end
 
   def standard_fields
-    return { 'Category' => 'category', 'Status' => 'status', 'Assigned to' => 'assigned_to', 'Author' => 'author', 'Created on' => 'created_on' }
+    return { l(:field_category) => 'category', l(:field_status) => 'status', l(:field_assigned_to) => 'assigned_to', l(:field_author) => 'author', l(:field_created_on) => 'created_on' }
   end
 
   def tracker_options
-    options = { 'All trackers' => 0 }
+    options = { l(:label_tracker_all) => 0 }
     Tracker.order(:name).map{ |t| options[t.name] = t.id.to_s }
     return options
   end

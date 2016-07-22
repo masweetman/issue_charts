@@ -5,6 +5,6 @@
   <%= f.hidden_field :user_id, :value => User.current.id %>
   <%= render "#{@chart.current_step}_step", :f => f %>
   <p>
-    <%= f.submit 'Submit' %>
+    <%= f.submit l(:button_submit) %>
   </p>
 <% end %>

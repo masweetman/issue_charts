@@ -1,20 +1,20 @@
 <div class='box tabular'>
   <p>
-    <%= f.label 'Chart name:' %>
+    <%= f.label l(:field_name) %>
     <%= f.text_field :name, :required => true %>
   </p>
   <p>
-    <%= f.label 'Chart type:' %>
+    <%= f.label l(:field_type) %>
     <%= f.select :chart_type, chart_type_options, { include_blank: true }, :required => true %>
   </p>
   <% if User.current.allowed_to?(:create_public_charts, @project) %>
   <p>
     <%= f.check_box :public %>
-    <%= f.label 'Public chart' %>
+    <%= f.label l(:field_is_public) %>
   </p>
   <% end %>
   <p>
-    <%= f.label 'Tracker:' %>
+    <%= f.label l(:field_tracker) %>
     <%= f.select :tracker_id, tracker_options, { include_blank: true }, :required => true %>
   </p>
 </div>
