@@ -4,7 +4,7 @@
 
 <h2><%= @chart.name %></h2>
 
-<%= Tracker.find(@chart.tracker_id).name.pluralize if @chart.tracker_id > 0 %>
+<%= Tracker.find(@chart.tracker_id).name + ' ' + l(:label_issue_plural).downcase if @chart.tracker_id > 0 %>
 <%= l(:label_issues_visibility_all) if @chart.tracker_id == 0 %>
 <%= '(' + l(:label_n_days, count: @chart.range_integer) + ')' if @chart.range_type == 'days' %>
 <%= '(' + l(:label_n_months, count: @chart.range_integer) + ')' if @chart.range_type == 'months' %>
