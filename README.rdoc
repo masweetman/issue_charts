@@ -4,12 +4,12 @@ This plugin provides the capability to create beautiful charts and graphs for yo
 
 == Installation
 
-* Clone into your plugins folder: <b>git clone https://github.com/masweetman/issue_charts.git</b>
-* Run <b>rake redmine:plugins:migrate RAILS_ENV=production</b>
-* Run <b>bundle install</b>
+* Clone into your plugins folder: <code>git clone https://github.com/masweetman/issue_charts.git</code>
+* Run <code>bundle install</code>
+* Run <code>rake redmine:plugins:migrate RAILS_ENV=production</code>
 * Restart Redmine
 
 == To use groupdate
 
-* In config/application.rb, set the time zone to utc: <b>config.active_record.default_timezone = :utc</b>
-* Install time zone support: <b>https://github.com/ankane/groupdate#for-mysql</b>
+* In config/application.rb, set the time zone to utc: <code>config.active_record.default_timezone = :utc</code>
+* Install time zone support: <code>https://github.com/ankane/groupdate#for-mysql</code>
