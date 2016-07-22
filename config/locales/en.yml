@@ -1,5 +1,6 @@
 # English strings go here for Rails i18n
 en:
+  label_charts: Charts
   label_month_plural: months
   label_year_plural: years
   label_n_days: "last %{count} days"
@@ -15,3 +16,8 @@ en:
   label_area_chart: Area chart
   label_created_vs_closed_issues: Created vs closed issues
 
+  permission_view_charts: View charts
+  permission_create_charts: Create charts
+  permission_create_public_charts: Create public charts
+  permission_edit_charts: Edit charts
+  permission_edit_public_charts: Edit public charts

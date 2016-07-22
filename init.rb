@@ -15,6 +15,6 @@ Redmine::Plugin.register :issue_charts do
     permission :edit_public_charts, :charts => [:edit, :update]
   end
   
-  menu :project_menu, :charts, { :controller => 'charts', :action => 'index' }, :caption => 'Charts', :after => :issues, :param => :project_id
+  menu :project_menu, :charts, { :controller => 'charts', :action => 'index' }, :caption => :label_charts, :after => :issues, :param => :project_id
 
 end
