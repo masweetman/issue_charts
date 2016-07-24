@@ -1,0 +1,29 @@
+de:
+  label_charts: Diagramme
+  field_chart_type: Diagrammtyp
+  label_month_plural: Monaten
+  label_year_plural: Jahren
+  label_n_days:
+    one: "letzter Tag"
+    other: "letzte %{count} Tage"
+  label_n_months:
+    one: "letzter Monat"
+    other: "letzte %{count} Monate"
+  label_n_years:
+    one: "letztes Jahr"
+    other: "letzte %{count} Jahre"
+  label_new_chart: Neues Diagramm
+  label_my_charts: Meine Diagramme
+  label_public_charts: Öffentliche Diagramme
+  label_line_chart: Liniendiagramm
+  label_pie_chart: Kreisdiagramm
+  label_column_chart: Säulendiagramm
+  label_bar_chart: Balkendiagramm
+  label_area_chart: Flächendiagramm
+  label_created_vs_closed_issues: Erstellte vs. geschlossene Tickets
+
+  permission_view_charts: Diagramme anzeigen
+  permission_create_charts: Diagramme erstellen
+  permission_create_public_charts: Öffentliche Diagramme erstellen
+  permission_edit_charts: Diagramme bearbeiten
+  permission_edit_public_charts: Öffentliche Diagramme bearbeiten
