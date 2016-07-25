@@ -12,6 +12,7 @@ es:
   label_n_years:
     one: "1 año"
     other: "%{count} años"
+  label_tracker_all: Todos los tipos de peticiones
   label_new_chart: Nuevo gráfico
   label_my_charts: Mis gráficos
   label_public_charts: Gráficos públicos

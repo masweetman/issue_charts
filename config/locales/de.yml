@@ -12,6 +12,7 @@ de:
   label_n_years:
     one: "letztes Jahr"
     other: "letzte %{count} Jahre"
+  label_tracker_all: All trackers
   label_new_chart: Neues Diagramm
   label_my_charts: Meine Diagramme
   label_public_charts: Öffentliche Diagramme

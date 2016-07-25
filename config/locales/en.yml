@@ -12,6 +12,7 @@ en:
   label_n_years:
     one: "last 1 year"
     other: "last %{count} years"
+  label_tracker_all: All trackers
   label_new_chart: New chart
   label_my_charts: My charts
   label_public_charts: Public charts

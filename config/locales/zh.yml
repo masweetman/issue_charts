@@ -12,6 +12,7 @@ zh:
   label_n_years:
     one: "去年"
     other: "过去 %{count} 年"
+  label_tracker_all: All trackers
   label_new_chart: 新建图表
   label_my_charts: 我的图表
   label_public_charts: 公共图表
