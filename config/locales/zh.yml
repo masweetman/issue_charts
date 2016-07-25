@@ -1,0 +1,29 @@
+zh:
+  label_charts: Issue Charts
+  field_chart_type: 图表类型
+  label_month_plural: 月份
+  label_year_plural: 年
+  label_n_days:
+    one: "昨天"
+    other: "过去 %{count} 天"
+  label_n_months:
+    one: "上个月"
+    other: "过去 %{count} 个月"
+  label_n_years:
+    one: "去年"
+    other: "过去 %{count} 年"
+  label_new_chart: 新建图表
+  label_my_charts: 我的图表
+  label_public_charts: 公共图表
+  label_line_chart: 折线图
+  label_pie_chart: 饼图
+  label_column_chart: 柱形图
+  label_bar_chart: 条形图
+  label_area_chart: 面积图
+  label_created_vs_closed_issues: 已创建 VS 已关闭
+
+  permission_view_charts: 查看图表
+  permission_create_charts: 创建图表
+  permission_create_public_charts: 创建公共图表
+  permission_edit_charts: 编辑图表
+  permission_edit_public_charts: 编辑公共图表
