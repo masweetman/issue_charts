@@ -21,5 +21,14 @@ class Chart < ActiveRecord::Base
   def predefined?
     predefined_types.values.include? chart_type
   end
+  
+  def projects
+    project = Project.find(project_id)
+    projects = [project_id]
+    if Setting.display_subprojects_issues?
+      projects += project.children.map{ |p| p.id }
+    end
+    return projects
+  end
 
 end
