@@ -37,11 +37,17 @@ module ChartsHelper
   end
 
   def issue_scope(chart)
+    project = Project.find(chart.project_id)
+    projects = [project.id]
+    if Setting.display_subprojects_issues?
+      projects += project.children.map{ |p| p.id }
+    end
+    
     start_date = chart_start_date(chart)
     if chart.tracker_id == 0
-      scope = Issue.where('project_id = ? AND created_on > ?', chart.project_id, start_date)
+      scope = Issue.where('project_id IN (?) AND created_on > ?', projects, start_date)
     else
-      scope = Issue.where('project_id = ? AND tracker_id = ? AND created_on > ?', chart.project_id, chart.tracker_id, start_date)
+      scope = Issue.where('project_id IN (?) AND tracker_id = ? AND created_on > ?', projects, chart.tracker_id, start_date)
     end
   end
 
@@ -97,8 +103,14 @@ module ChartsHelper
   def render_chart(chart)
     begin
       start_date = chart_start_date(chart)
+      project = Project.find(chart.project_id)
+      projects = [project.id]
+      if Setting.display_subprojects_issues?
+        projects += project.children.map{ |p| p.id }
+      end
+      
       if ('0' + chart.group_by_field.to_s).to_i > 0
-        scope = CustomValue.where("customized_type = ? AND custom_field_id = ?", 'Issue', chart.group_by_field).joins("INNER JOIN issues ON (custom_values.customized_id = issues.id)").where("project_id = ? AND tracker_id = ? AND created_on > ?", chart.project_id, chart.tracker_id, start_date)
+        scope = CustomValue.where("customized_type = ? AND custom_field_id = ?", 'Issue', chart.group_by_field).joins("INNER JOIN issues ON (custom_values.customized_id = issues.id)").where("project_id IN (?) AND tracker_id = ? AND created_on > ?", projects, chart.tracker_id, start_date)
         group = 'value'
       else
         scope = issue_scope(chart)
