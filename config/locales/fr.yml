@@ -1,0 +1,31 @@
+#Laurent HADJADJ - 11/09/2016
+fr:
+  label_charts: Graphiques
+  field_chart_type: Type de graphique
+  label_month_plural: mois
+  label_year_plural: années
+  label_n_days:
+    one: "dernier jour"
+    other: "%{count} derniers jours"
+  label_n_months:
+    one: "dernier mois"
+    other: "%{count} dernier mois"
+  label_n_years:
+    one: "année courrante"
+    other: "%{count} dernières années"
+  label_tracker_all: tous les sujets
+  label_new_chart: Nouveau graphique
+  label_my_charts: Mes graphiques
+  label_public_charts: Graphiques publics
+  label_line_chart: Courbe
+  label_pie_chart: Diagramme circulaire
+  label_column_chart: Histogramme
+  label_bar_chart: Diagramme à bandes
+  label_area_chart: Zone graphique
+  label_created_vs_closed_issues: Demandes créées vs fermées
+
+  permission_view_charts: Voir les graphiques
+  permission_create_charts: Créer un graphique
+  permission_create_public_charts: Créer un graphique public
+  permission_edit_charts: Editer un graphique
+  permission_edit_public_charts: Editer un graphique public
