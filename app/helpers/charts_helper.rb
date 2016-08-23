@@ -35,6 +35,12 @@ module ChartsHelper
   def chart_start_date(chart)
     eval("Date.today - chart.range_integer." + chart.range_type) unless chart.range_integer.nil? || chart.range_type.nil?
   end
+  
+  def all_project_children(project)
+    project.children.map do |child|
+      [child.id] + all_project_children(child)
+    end.flatten.uniq
+  end
 
   def issue_scope(chart)
     start_date = chart_start_date(chart)

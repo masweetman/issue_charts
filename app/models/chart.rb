@@ -26,9 +26,9 @@ class Chart < ActiveRecord::Base
     project = Project.find(project_id)
     projects = [project_id]
     if Setting.display_subprojects_issues?
-      projects += project.children.map{ |p| p.id }
+      projects += all_project_children(project)
     end
     return projects
   end
-
+  
 end
