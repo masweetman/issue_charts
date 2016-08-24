@@ -45,9 +45,9 @@ module ChartsHelper
   def issue_scope(chart)
     start_date = chart_start_date(chart)
     if chart.tracker_id == 0
-      scope = Issue.where('project_id IN (?) AND created_on > ?', chart.projects, start_date)
+      scope = Issue.where('issues.project_id IN (?) AND issues.created_on > ?', chart.projects, start_date)
     else
-      scope = Issue.where('project_id IN (?) AND tracker_id = ? AND created_on > ?', chart.projects, chart.tracker_id, start_date)
+      scope = Issue.where('issues.project_id IN (?) AND issues.tracker_id = ? AND issues.created_on > ?', chart.projects, chart.tracker_id, start_date)
     end
   end
 
@@ -74,12 +74,14 @@ module ChartsHelper
           :f=>[:status_id, :tracker_id, :created_on, chart.group_by_field.to_s + '_id'],
           :op=>{:status_id => status_op, :tracker_id => '=', :created_on => '>=', chart.group_by_field.to_s + '_id' => '='},
           :v=>{:tracker_id => [chart.tracker_id.to_s], :created_on => [chart_start_date(chart).to_s], chart.group_by_field.to_s + '_id' => [object_id.to_s]},
+          :c=>[:tracker, :status, :priority, :subject, :assigned_to, :estimated_hours, :spent_hours]
           )
       elsif chart.tracker_id == 0
         project_issues_path(Project.find(chart.project_id), :set_filter => 1,
           :f=>[:status_id, :created_on, chart.group_by_field.to_s + '_id'],
           :op=>{:status_id => status_op, :created_on => '>=', chart.group_by_field.to_s + '_id' => '='},
           :v=>{:created_on => [chart_start_date(chart).to_s], chart.group_by_field.to_s + '_id' => [object_id.to_s]},
+          :c=>[:tracker, :status, :priority, :subject, :assigned_to, :estimated_hours, :spent_hours]
           )
       end
     rescue Exception => e
@@ -130,7 +132,13 @@ module ChartsHelper
         else
           group_code = 'group'
         end
-        code = chart_code + ' scope.' + group_code + '(group).count'
+        
+        if chart.time.to_s.empty?
+          code = chart_code + ' scope.' + group_code + '(group).count'
+        else
+          code = chart_code + ' scope.' + group_code + '(group).' + 'sum(:estimated_hours)' if chart.time == 'estimated_hours'
+          code = chart_code + ' scope.joins(:time_entries).' + group_code + '(group).' + 'sum(:hours)' if chart.time == 'spent_hours'
+        end
 
       elsif chart.chart_type == 'Created vs Closed Issues'
         created_issues = 0

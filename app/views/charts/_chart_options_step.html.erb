@@ -8,8 +8,12 @@
   <% unless @chart.predefined? %>
     <p>
       <%= f.label l(:field_group_by) %>
-      <%= f.select :group_by_field, group_by_field_options(@chart.tracker_id), include_blank: true, :required => true unless @chart.tracker_id == 0 %>
-      <%= f.select :group_by_field, { l(:field_tracker) => 'tracker' }.merge(standard_fields), include_blank: true, :required => true if @chart.tracker_id == 0 %>
+      <% options = standard_fields %>
+      <% if @chart.time == 'spent_hours' %>
+        <% options.delete(l(:field_created_on)) %>
+      <% end %>
+      <%= f.select :group_by_field, group_by_field_options(@chart.tracker_id), include_blank: true, :required => true unless (@chart.tracker_id == 0 || !@chart.time.to_s.empty?) %>
+      <%= f.select :group_by_field, { l(:field_tracker) => 'tracker' }.merge(options), include_blank: true, :required => true if (@chart.tracker_id == 0 || !@chart.time.to_s.empty?) %>
     </p>
   <% end %>
 
