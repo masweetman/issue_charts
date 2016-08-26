@@ -1,10 +1,7 @@
+<%= javascript_include_tag 'issue_charts.js', :plugin => 'issue_charts' %>
+
 <h2>New chart</h2>
 
-<%= form_for @chart do |f| %>
-  <%= f.hidden_field :project_id, :value => @project.id %>
-  <%= f.hidden_field :user_id, :value => User.current.id %>
-  <%= render "#{@chart.current_step}_step", :f => f %>
-  <p>
-    <%= f.submit l(:button_submit) %>
-  </p>
-<% end %>
+<div id="chart_options">
+  <%= render partial: 'chart_options' %>
+</div>

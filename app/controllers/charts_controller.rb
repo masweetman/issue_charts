@@ -1,3 +1,5 @@
+include ChartsHelper
+
 class ChartsController < ApplicationController
   unloadable
 
@@ -19,35 +21,71 @@ class ChartsController < ApplicationController
     end
   end
 
-  def new
-    session[:chart_params] ||= {}
+  def update_options
+    @chart_type_options = { l(:label_line_chart) => 'Line',
+      l(:label_pie_chart) => 'Pie',
+      l(:label_column_chart) => 'Column',
+      l(:label_bar_chart) => 'Bar',
+      l(:label_area_chart) => 'Area'}.merge(predefined_types)
+    
+    @tracker_options = { l(:label_tracker_all) => 0 }
+    Tracker.order(:name).map{ |t| @tracker_options[t.name] = t.id.to_s }
+    
+    @range_type_options = { l(:label_day_plural) => 'days', l(:label_month_plural) => 'months', l(:label_year_plural) => 'years' }
+    
+    unless predefined_types.values.include?(params[:chart_type])
+      @time_options = { l(:field_estimated_hours) => 'estimated_hours', l(:label_spent_time) => 'spent_hours' }
+    end
+
+    unless params[:chart_type].to_s.empty? || predefined_types.values.include?(params[:chart_type])
+      options = standard_fields
+      if params[:time] == 'spent_hours'
+        options.delete(l(:field_created_on))
+      end
+      @group_by_field_options = { l(:field_tracker) => 'tracker' }.merge(options) if (params[:tracker_id] == '0' || !params[:time].to_s.empty?)
+      @group_by_field_options = group_by_field_options(params[:tracker_id]) unless (params[:tracker_id] == '0' || !params[:time].to_s.empty?)
+    end
+    
     @project = Project.find(params[:project_id])
     if !(User.current.allowed_to?(:create_charts, @project) || User.current.allowed_to?(:create_public_charts, @project))
       render_404
     else
-      @chart = Chart.new(session[:chart_params])
-      @chart.current_step = session[:chart_step]
+      @chart = Chart.new
+    end
+    
+    respond_to do |format|
+      format.js
+    end
+  end
+  
+  def new
+    @chart_type_options = { l(:label_line_chart) => 'Line',
+      l(:label_pie_chart) => 'Pie',
+      l(:label_column_chart) => 'Column',
+      l(:label_bar_chart) => 'Bar',
+      l(:label_area_chart) => 'Area'}.merge(predefined_types)
+    
+    @tracker_options = { l(:label_tracker_all) => 0 }
+    Tracker.order(:name).map{ |t| @tracker_options[t.name] = t.id.to_s }
+    
+    @range_type_options = { l(:label_day_plural) => 'days', l(:label_month_plural) => 'months', l(:label_year_plural) => 'years' }
+  
+    @project = Project.find(params[:project_id])
+    if !(User.current.allowed_to?(:create_charts, @project) || User.current.allowed_to?(:create_public_charts, @project))
+      render_404
+    else
+      @chart = Chart.new
     end
   end
 
   def create
-    session[:chart_params].deep_merge!(params[:chart]) if params[:chart]
-    @chart = Chart.new(session[:chart_params])
+    @chart = Chart.new(chart_params)
     @project = Project.find(@chart.project_id)
-    @chart.current_step = session[:chart_step]
-    if @chart.last_step?
-      @chart.save
-    else
-      @chart.next_step
-    end
-    session[:chart_step] = @chart.current_step
 
-    if @chart.new_record?
-      render 'new'
+    if @chart.save
+      redirect_to @chart
     else
-      session.delete(:chart_step)
-      session.delete(:chart_params)
-      redirect_to action: 'show', id: @chart.id
+      render 'new'
     end
   end
 
