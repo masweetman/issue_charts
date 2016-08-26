@@ -76,14 +76,20 @@ module ChartsHelper
   end
 
   def chart_issues_count(chart, object_id, status)
-    query = chart.group_by_field.to_s + '_id = ?'
+    query = 'issues.' + chart.group_by_field.to_s + '_id = ?'
     scope = issue_scope(chart).where(query, object_id)
     if status == 'o'
-      count = scope.open.count
+      count = scope.open.count.to_s if chart.time.to_s.empty?
+      count = scope.open.sum(:estimated_hours).to_s + ' h' if chart.time == 'estimated_hours'
+      count = scope.open.joins(:time_entries).sum(:hours).to_s + ' h' if chart.time == 'spent_hours'
     elsif status == '*'
-      count = scope.count
+      count = scope.count.to_s if chart.time.to_s.empty?
+      count = scope.sum(:estimated_hours).to_s + ' h' if chart.time == 'estimated_hours'
+      count = scope.joins(:time_entries).sum(:hours).to_s + ' h' if chart.time == 'spent_hours'
     elsif status == 'c'
-      count = scope.count - scope.open.count
+      count = (scope.count - scope.open.count).to_s if chart.time.to_s.empty?
+      count = (scope.sum(:estimated_hours) - scope.open.sum(:estimated_hours)).to_s + ' h' if chart.time == 'estimated_hours'
+      count = (scope.joins(:time_entries).sum(:hours) - scope.open.joins(:time_entries).sum(:hours)).to_s + ' h' if chart.time == 'spent_hours'
     end
     return count
   end
