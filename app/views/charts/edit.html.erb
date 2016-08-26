@@ -1,43 +1,7 @@
+<%= javascript_include_tag 'issue_charts_edit.js', :plugin => 'issue_charts' %>
+
 <h2>Edit <%= @chart.name %></h2>
 
-<%= form_for @chart do |f| %>
-<div class='box tabular'>
-  
-  <p>
-    <%= f.label l(:field_name) %>
-    <%= f.text_field :name, :required => true %>
-  </p>
-  <% if User.current.allowed_to?(:create_public_charts, @project) %>
-  <p>
-    <%= f.check_box :public %>
-    <%= f.label l(:field_is_public) %>
-  </p>
-  <% end %>
-  <p>
-    <%= f.label l(:label_in_the_past_days) %>
-    <%= f.text_field :range_integer, :required => true %>
-    <%= f.select :range_type, { l(:label_day_plural) => 'days', l(:label_month_plural) => 'months', l(:label_year_plural) => 'years' }, include_blank: false %>
-  </p>
-  <% if !@chart.time.to_s.empty? %>
-    <p>
-      <%= f.label l(:label_time_tracking) %>
-      <%= f.select :time, { l(:field_estimated_hours) => 'estimated_hours', l(:label_spent_time) => 'spent_hours' }, { include_blank: true }, :required => false %>
-    </p>
-  <% end %>
-  <% unless @chart.predefined? %>
-    <p>
-      <%= f.label l(:field_group_by) %>
-      <% options = standard_fields %>
-      <% if @chart.time == 'spent_hours' %>
-        <% options.delete(l(:field_created_on)) %>
-      <% end %>
-      <%= f.select :group_by_field, group_by_field_options(@chart.tracker_id), include_blank: true, :required => true unless (@chart.tracker_id == 0 || !@chart.time.to_s.empty?) %>
-      <%= f.select :group_by_field, { l(:field_tracker) => 'tracker' }.merge(options), include_blank: true, :required => true if (@chart.tracker_id == 0 || !@chart.time.to_s.empty?) %>
-    </p>
-  <% end %>
+<div id="chart_options">
+  <%= render partial: 'chart_options' %>
 </div>
-
-<p>
-  <%= f.submit l(:button_save) %>
-</p>
-<% end %>

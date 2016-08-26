@@ -21,7 +21,7 @@ class ChartsController < ApplicationController
     end
   end
 
-  def update_options
+  def set_options
     @chart_type_options = { l(:label_line_chart) => 'Line',
       l(:label_pie_chart) => 'Pie',
       l(:label_column_chart) => 'Column',
@@ -43,15 +43,34 @@ class ChartsController < ApplicationController
         options.delete(l(:field_created_on))
       end
       @group_by_field_options = { l(:field_tracker) => 'tracker' }.merge(options) if (params[:tracker_id] == '0' || !params[:time].to_s.empty?)
-      @group_by_field_options = group_by_field_options(params[:tracker_id]) unless (params[:tracker_id] == '0' || !params[:time].to_s.empty?)
+      @group_by_field_options = group_by_field_options(params[:tracker_id]) unless (params[:tracker_id] == '' || params[:tracker_id] == '0' || !params[:time].to_s.empty?)
     end
+  end
+
+  def update_edit_options
+    @chart = Chart.find(params[:id])
+    @project = Project.find(@chart.project_id)
+    params[:name] ||= @chart.name
+    params[:tracker_id] ||= @chart.tracker_id.to_s
+    params[:chart_type] ||= @chart.chart_type
+    params[:group_by_field] ||= @chart.group_by_field
+    params[:public] ||= @chart.public.to_s
+    params[:range_integer] ||= @chart.range_integer.to_s
+    params[:range_type] ||= @chart.range_type
+    params[:time] ||= @chart.time
+
+    set_options
     
-    @project = Project.find(params[:project_id])
-    if !(User.current.allowed_to?(:create_charts, @project) || User.current.allowed_to?(:create_public_charts, @project))
-      render_404
-    else
-      @chart = Chart.new
+    respond_to do |format|
+      format.js
     end
+  end
+
+  def update_options
+    @project = Project.find(params[:project_id])
+    @chart = Chart.new
+
+    set_options
     
     respond_to do |format|
       format.js
@@ -59,6 +78,13 @@ class ChartsController < ApplicationController
   end
   
   def new
+    @project = Project.find(params[:project_id])
+    if !(User.current.allowed_to?(:create_charts, @project) || User.current.allowed_to?(:create_public_charts, @project))
+      render_404
+    else
+      @chart = Chart.new
+    end
+
     @chart_type_options = { l(:label_line_chart) => 'Line',
       l(:label_pie_chart) => 'Pie',
       l(:label_column_chart) => 'Column',
@@ -69,13 +95,6 @@ class ChartsController < ApplicationController
     Tracker.order(:name).map{ |t| @tracker_options[t.name] = t.id.to_s }
     
     @range_type_options = { l(:label_day_plural) => 'days', l(:label_month_plural) => 'months', l(:label_year_plural) => 'years' }
-  
-    @project = Project.find(params[:project_id])
-    if !(User.current.allowed_to?(:create_charts, @project) || User.current.allowed_to?(:create_public_charts, @project))
-      render_404
-    else
-      @chart = Chart.new
-    end
   end
 
   def create
@@ -92,6 +111,39 @@ class ChartsController < ApplicationController
   def edit
     @chart = Chart.find(params[:id])
     @project = Project.find(@chart.project_id)
+    params[:name] = @chart.name
+    params[:tracker_id] = @chart.tracker_id.to_s
+    params[:chart_type] = @chart.chart_type
+    params[:group_by_field] = @chart.group_by_field
+    params[:public] = @chart.public.to_s
+    params[:range_integer] = @chart.range_integer.to_s
+    params[:range_type] = @chart.range_type
+    params[:time] = @chart.time
+
+    @chart_type_options = { l(:label_line_chart) => 'Line',
+      l(:label_pie_chart) => 'Pie',
+      l(:label_column_chart) => 'Column',
+      l(:label_bar_chart) => 'Bar',
+      l(:label_area_chart) => 'Area'}.merge(predefined_types)
+    
+    @tracker_options = { l(:label_tracker_all) => 0 }
+    Tracker.order(:name).map{ |t| @tracker_options[t.name] = t.id.to_s }
+    
+    @range_type_options = { l(:label_day_plural) => 'days', l(:label_month_plural) => 'months', l(:label_year_plural) => 'years' }
+    
+    unless predefined_types.values.include?(params[:chart_type])
+      @time_options = { l(:field_estimated_hours) => 'estimated_hours', l(:label_spent_time) => 'spent_hours' }
+    end
+
+    unless params[:chart_type].to_s.empty? || predefined_types.values.include?(params[:chart_type])
+      options = standard_fields
+      if params[:time] == 'spent_hours'
+        options.delete(l(:field_created_on))
+      end
+      @group_by_field_options = { l(:field_tracker) => 'tracker' }.merge(options) if (params[:tracker_id] == '0' || !params[:time].to_s.empty?)
+      @group_by_field_options = group_by_field_options(params[:tracker_id]) unless (params[:tracker_id] == '' || params[:tracker_id] == '0' || !params[:time].to_s.empty?)
+    end
+
     if !(User.current.allowed_to?(:edit_charts, @project) || User.current.allowed_to?(:edit_public_charts, @project))
       render_404
     end
