@@ -1,6 +1,6 @@
 sv:
   label_charts: Diagram
-  field_chart_type: Diagramtype
+  field_chart_type: Diagramtyp
   label_month_plural: månader
   label_year_plural: år
   label_n_days:
@@ -12,7 +12,7 @@ sv:
   label_n_years:
     one: "senaste året"
     other: "senaste %{count} åren"
-  label_tracker_all: Alla trackers
+  label_tracker_all: Alla ärendetyper
   label_new_chart: Nytt diagram
   label_my_charts: Mina diagram
   label_public_charts: Publika diagram
