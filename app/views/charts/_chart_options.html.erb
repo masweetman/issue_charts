@@ -1,4 +1,6 @@
 <%= labelled_form_for @chart do |f| %>
+  <%= error_messages_for 'chart' %>
+  
   <%= f.hidden_field :project_id, :value => @project.id %>
   <%= f.hidden_field :user_id, :value => User.current.id %>
 
@@ -7,7 +9,7 @@
     <%= f.text_field :name, required: true, value: params[:name], :id => 'name_field' %>
   </p>
   <p>
-    <%= f.select :chart_type, @chart_type_options, { selected: params[:chart_type], include_blank: true }, :required => true, :id => 'chart_type_select' %>
+    <%= f.select :chart_type, @chart_type_options, { required: true, selected: params[:chart_type], include_blank: true }, :id => 'chart_type_select' %>
   </p>
   <% if User.current.allowed_to?(:create_public_charts, @project) %>
   <p>
@@ -15,12 +17,12 @@
   </p>
   <% end %>
   <p>
-    <%= f.select :tracker_id, @tracker_options, { selected: params[:tracker_id], include_blank: true }, :required => true, :id => 'tracker_select' %>
+    <%= f.select :tracker_id, @tracker_options, { required: true, selected: params[:tracker_id], include_blank: true }, :id => 'tracker_select' %>
   </p>
 
   <p>
     <% params[:range_integer] ||= 30 %>
-    <%= f.text_field :range_integer, :required => true, value: params[:range_integer], :id => 'range_field' %>
+    <%= f.text_field :range_integer, required: true, value: params[:range_integer], :id => 'range_field' %>
     <%= f.select :range_type, @range_type_options, { selected: params[:range_type], include_blank: false, label: '' }, :id => 'date_range_type_select' %>
   </p>
 
@@ -32,13 +34,13 @@
   
   <% unless @time_options.nil? %>
     <p>
-      <%= f.select :time, @time_options, { selected: params[:time], include_blank: true }, :required => false, :id => 'time_tracking_select' %>
+      <%= f.select :time, @time_options, { selected: params[:time], include_blank: true }, :id => 'time_tracking_select' %>
     </p>
   <% end %>
   
   <% unless @group_by_field_options.nil? %>
     <p>
-      <%= f.select :group_by_field, @group_by_field_options, { selected: params[:group_by_field], include_blank: true }, :required => true, :id => 'group_by_select' %>
+      <%= f.select :group_by_field, @group_by_field_options, { required: true, selected: params[:group_by_field], include_blank: true }, :id => 'group_by_select' %>
     </p>
   <% end %>
 </div>

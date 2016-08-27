@@ -106,7 +106,22 @@ class ChartsController < ApplicationController
     if @chart.save
       redirect_to @chart
     else
-      render 'new'
+      params[:name] ||= @chart.name
+      params[:tracker_id] ||= @chart.tracker_id.to_s
+      params[:chart_type] ||= @chart.chart_type
+      params[:group_by_field] ||= @chart.group_by_field
+      params[:is_public] ||= @chart.is_public.to_s
+      params[:range_integer] ||= @chart.range_integer.to_s
+      params[:range_type] ||= @chart.range_type
+      params[:time] ||= @chart.time
+      params[:issue_status] ||= @chart.issue_status
+
+      set_options
+
+      respond_to do |format|
+        format.html { redirect_to action: 'new', project_id: @project.identifier }
+        format.api  { render_validation_errors(@chart) }
+      end
     end
   end
 
@@ -160,7 +175,22 @@ class ChartsController < ApplicationController
       redirect_to action: 'show', id: @chart.id
       flash[:notice] = l(:notice_successful_update)
     else
-      redirect_to action: 'edit', id: @chart.id
+      params[:name] ||= @chart.name
+      params[:tracker_id] ||= @chart.tracker_id.to_s
+      params[:chart_type] ||= @chart.chart_type
+      params[:group_by_field] ||= @chart.group_by_field
+      params[:is_public] ||= @chart.is_public.to_s
+      params[:range_integer] ||= @chart.range_integer.to_s
+      params[:range_type] ||= @chart.range_type
+      params[:time] ||= @chart.time
+      params[:issue_status] ||= @chart.issue_status
+
+      set_options
+
+      respond_to do |format|
+        format.html { redirect_to action: 'edit', id: @chart.id }
+        format.api  { render_validation_errors(@chart) }
+      end
     end
   end
 
@@ -171,7 +201,7 @@ class ChartsController < ApplicationController
       render_404
     else
       @chart.destroy
-      redirect_to action: 'index', project_id: @project.id
+      redirect_to action: 'index', project_id: @project.identifier
       flash[:notice] = l(:notice_successful_delete)
     end
   end

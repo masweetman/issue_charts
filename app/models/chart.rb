@@ -2,6 +2,9 @@ class Chart < ActiveRecord::Base
   attr_writer :current_step
   include ChartsHelper
 
+  validates_presence_of :name, :chart_type, :tracker_id, :range_integer
+  validates_presence_of :group_by_field, :if => :not_predefined?
+
   def current_step
     @current_step || steps.first
   end
@@ -20,6 +23,10 @@ class Chart < ActiveRecord::Base
 
   def predefined?
     predefined_types.values.include? chart_type
+  end
+
+  def not_predefined?
+    !predefined?
   end
   
   def projects

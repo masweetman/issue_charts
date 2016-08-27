@@ -32,3 +32,4 @@ en:
   field_issue_status: :label_issue_status
   field_time: :label_time_tracking
   field_group_by_field: :field_group_by
+  error_empty_fields: Required fields cannot be blank
