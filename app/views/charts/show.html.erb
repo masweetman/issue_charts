@@ -12,29 +12,44 @@
 
 <%= render_chart(@chart) %>
 
-<% if { l(:field_tracker) => 'tracker' }.merge(standard_fields).values.include? @chart.group_by_field %>
-  <% objects = render_link_objects(@chart) %>
-  <% unless objects.empty? %>
-  <table class="list issue-report">
-    <thead>
-      <tr>
-        <th></th>
-        <th><%=l(:label_open_issues_plural)%></th>
-        <th><%=l(:label_closed_issues_plural)%></th>
-        <th><%=l(:label_total)%></th>
-      </tr>
-    </thead>
-    <tbody>
-    <% objects.each do |o| %>
-      <tr class="<%= cycle("odd", "even") %>">
-        <td class="name"><%= link_to o.name, chart_issues_path(@chart, o.id, '*') %></td>
-        <td><%= link_to chart_issues_count(@chart, o.id, 'o'), chart_issues_path(@chart, o.id, 'o') %></td>
-        <td><%= link_to chart_issues_count(@chart, o.id, 'c'), chart_issues_path(@chart, o.id, 'c') %></td>
-        <td><%= link_to chart_issues_count(@chart, o.id, '*'), chart_issues_path(@chart, o.id, '*') %></td>
-      </tr>
-    <% end %>
-    </tbody>
-  </table>
-  <% end %>
-<% end %>
+<% unless @chart.predefined? %>
 
+  <% objects = render_link_objects(@chart) %>
+
+  <% unless objects.empty? %>
+    <table class="list issue-report">
+      <thead>
+        <tr>
+          <th></th>
+          <th><%=l(:label_open_issues_plural)%></th>
+          <th><%=l(:label_closed_issues_plural)%></th>
+          <th><%=l(:label_total)%></th>
+        </tr>
+      </thead>
+      <tbody>  
+
+        <% if ('0' + @chart.group_by_field.to_s).to_i > 0 %>
+          <% objects.each do |o| %>
+            <tr class="<%= cycle("odd", "even") %>">
+              <td class="name"><%= link_to o, chart_issues_path(@chart, o, '*') %></td>
+              <td><%= link_to chart_issues_count(@chart, o, 'o'), chart_issues_path(@chart, o, 'o') %></td>
+              <td><%= link_to chart_issues_count(@chart, o, 'c'), chart_issues_path(@chart, o, 'c') %></td>
+              <td><%= link_to chart_issues_count(@chart, o, '*'), chart_issues_path(@chart, o, '*') %></td>
+            </tr>
+          <% end %>
+        <% else %>  
+          <% objects.each do |o| %>
+            <tr class="<%= cycle("odd", "even") %>">
+              <td class="name"><%= link_to o.name, chart_issues_path(@chart, o.id, '*') %></td>
+              <td><%= link_to chart_issues_count(@chart, o.id, 'o'), chart_issues_path(@chart, o.id, 'o') %></td>
+              <td><%= link_to chart_issues_count(@chart, o.id, 'c'), chart_issues_path(@chart, o.id, 'c') %></td>
+              <td><%= link_to chart_issues_count(@chart, o.id, '*'), chart_issues_path(@chart, o.id, '*') %></td>
+            </tr>
+          <% end %>
+        <% end %>
+
+      </tbody>
+    </table>
+  <% end %>
+
+<% end %>

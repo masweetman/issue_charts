@@ -30,27 +30,25 @@ module ChartsHelper
 
   def issue_scope(chart)
     start_date = chart_start_date(chart)
-    if chart.tracker_id == 0
-      scope = Issue.where('issues.project_id IN (?) AND issues.created_on > ?', chart.projects, start_date)
-    else
+    if ('0' + chart.group_by_field.to_s).to_i > 0
       scope = Issue.where('issues.project_id IN (?) AND issues.tracker_id = ? AND issues.created_on > ?', chart.projects, chart.tracker_id, start_date)
+      scope = scope.joins('INNER JOIN custom_values ON (issues.id = custom_values.customized_id)').where('custom_values.custom_field_id = ?', chart.group_by_field)
+    else
+      if chart.tracker_id == 0
+        scope = Issue.where('issues.project_id IN (?) AND issues.created_on > ?', chart.projects, start_date)
+      else
+        scope = Issue.where('issues.project_id IN (?) AND issues.tracker_id = ? AND issues.created_on > ?', chart.projects, chart.tracker_id, start_date)
+      end
     end
-
-    if chart.issue_status == 'o'
-      scope = scope.joins(:status).where('issue_statuses.is_closed = ?', false)
-    elsif chart.issue_status == 'c'
-      scope = scope.joins(:status).where('issue_statuses.is_closed = ?', true)
-    end
-
     scope
   end
 
   def render_link_objects(chart)
     objects = []
+    scope = issue_scope(chart)
     if ('0' + chart.group_by_field.to_s).to_i > 0
-      return nil
+      objects = scope.map{ |i| i.custom_field_value(chart.group_by_field.to_i) }.uniq.compact.sort
     else
-      scope = issue_scope(chart)
       objects = scope.map{ |i| eval("i." + chart.group_by_field.to_s) }.uniq.compact.sort unless chart.group_by_field.to_s == 'created_on'
     end
     return objects
@@ -63,20 +61,38 @@ module ChartsHelper
       else
         status_op = status
       end
-      if chart.tracker_id > 0
-        project_issues_path(Project.find(chart.project_id), :set_filter => 1,
-          :f=>[:status_id, :tracker_id, :created_on, chart.group_by_field.to_s + '_id'],
-          :op=>{:status_id => status_op, :tracker_id => '=', :created_on => '>=', chart.group_by_field.to_s + '_id' => '='},
-          :v=>{:tracker_id => [chart.tracker_id.to_s], :created_on => [chart_start_date(chart).to_s], chart.group_by_field.to_s + '_id' => [object_id.to_s]},
-          :c=>[:tracker, :status, :priority, :subject, :assigned_to, :estimated_hours, :spent_hours]
-          )
-      elsif chart.tracker_id == 0
-        project_issues_path(Project.find(chart.project_id), :set_filter => 1,
-          :f=>[:status_id, :created_on, chart.group_by_field.to_s + '_id'],
-          :op=>{:status_id => status_op, :created_on => '>=', chart.group_by_field.to_s + '_id' => '='},
-          :v=>{:created_on => [chart_start_date(chart).to_s], chart.group_by_field.to_s + '_id' => [object_id.to_s]},
-          :c=>[:tracker, :status, :priority, :subject, :assigned_to, :estimated_hours, :spent_hours]
-          )
+      if ('0' + chart.group_by_field.to_s).to_i > 0
+        if chart.tracker_id > 0
+          project_issues_path(Project.find(chart.project_id), :set_filter => 1,
+            :f=>[:status_id, :tracker_id, :created_on, 'cf_' + chart.group_by_field.to_s],
+            :op=>{:status_id => status_op, :tracker_id => '=', :created_on => '>=', 'cf_' + chart.group_by_field.to_s => '='},
+            :v=>{:tracker_id => [chart.tracker_id.to_s], :created_on => [chart_start_date(chart).to_s], 'cf_' + chart.group_by_field.to_s => [object_id.to_s]},
+            :c=>[:tracker, :status, :priority, :subject, :assigned_to, 'cf_' + chart.group_by_field.to_s, :estimated_hours, :spent_hours]
+            )
+        elsif chart.tracker_id == 0
+          project_issues_path(Project.find(chart.project_id), :set_filter => 1,
+            :f=>[:status_id, :created_on, 'cf_' + chart.group_by_field.to_s],
+            :op=>{:status_id => status_op, :created_on => '>=', 'cf_' + chart.group_by_field.to_s => '='},
+            :v=>{:created_on => [chart_start_date(chart).to_s], 'cf_' + chart.group_by_field.to_s => [object_id.to_s]},
+            :c=>[:tracker, :status, :priority, :subject, :assigned_to, 'cf_' + chart.group_by_field.to_s, :estimated_hours, :spent_hours]
+            )
+        end
+      else
+        if chart.tracker_id > 0
+          project_issues_path(Project.find(chart.project_id), :set_filter => 1,
+            :f=>[:status_id, :tracker_id, :created_on, chart.group_by_field.to_s + '_id'],
+            :op=>{:status_id => status_op, :tracker_id => '=', :created_on => '>=', chart.group_by_field.to_s + '_id' => '='},
+            :v=>{:tracker_id => [chart.tracker_id.to_s], :created_on => [chart_start_date(chart).to_s], chart.group_by_field.to_s + '_id' => [object_id.to_s]},
+            :c=>[:tracker, :status, :priority, :subject, :assigned_to, :estimated_hours, :spent_hours]
+            )
+        elsif chart.tracker_id == 0
+          project_issues_path(Project.find(chart.project_id), :set_filter => 1,
+            :f=>[:status_id, :created_on, chart.group_by_field.to_s + '_id'],
+            :op=>{:status_id => status_op, :created_on => '>=', chart.group_by_field.to_s + '_id' => '='},
+            :v=>{:created_on => [chart_start_date(chart).to_s], chart.group_by_field.to_s + '_id' => [object_id.to_s]},
+            :c=>[:tracker, :status, :priority, :subject, :assigned_to, :estimated_hours, :spent_hours]
+            )
+        end
       end
     rescue Exception => e
       flash[:error] = "Error loading links for chart '" + chart.name + "'. " + e.message
@@ -84,8 +100,13 @@ module ChartsHelper
   end
 
   def chart_issues_count(chart, object_id, status)
-    query = 'issues.' + chart.group_by_field.to_s + '_id = ?'
-    scope = issue_scope(chart).where(query, object_id)
+    scope = issue_scope(chart)
+    if ('0' + chart.group_by_field.to_s).to_i > 0
+      scope = scope.where('custom_values.value = ?', object_id)
+    else
+      query = 'issues.' + chart.group_by_field.to_s + '_id = ?'
+      scope = scope.where(query, object_id)
+    end
     if status == 'o'
       count = scope.open.count.to_s if chart.time.to_s.empty?
       count = scope.open.sum(:estimated_hours).to_s + ' h' if chart.time == 'estimated_hours'
@@ -104,23 +125,18 @@ module ChartsHelper
 
   def render_chart(chart)
     begin
-      start_date = chart_start_date(chart)
+      scope = issue_scope(chart)
+
       if ('0' + chart.group_by_field.to_s).to_i > 0
-        scope = CustomValue.where("customized_type = ? AND custom_field_id = ?", 'Issue', chart.group_by_field).joins("INNER JOIN issues ON (custom_values.customized_id = issues.id)").where("issues.project_id IN (?) AND issues.tracker_id = ? AND issues.created_on > ?", chart.projects, chart.tracker_id, start_date)
-
-        if chart.issue_status == 'o'
-          # get open issues (future)
-        elsif chart.issue_status == 'c'
-          # get closed issues (future)
-        end
-
-        group = 'value'
-
+        group = 'custom_values.value'
       else
-
-        scope = issue_scope(chart)
         group = chart.group_by_field
+      end
 
+      if chart.issue_status == 'o'
+        scope = scope.joins(:status).where('issue_statuses.is_closed = ?', false)
+      elsif chart.issue_status == 'c'
+        scope = scope.joins(:status).where('issue_statuses.is_closed = ?', true)
       end
 
       if !chart.predefined?
