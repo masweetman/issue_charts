@@ -6,7 +6,7 @@ $(function() {
       data: {
         'chart_type': $("#chart_type_select option:selected").val(),
         'name': $("#name_field").val(),
-        'public': $("#public_checkbox").is(":checked"),
+        'is_public': $("#public_checkbox").is(":checked"),
         'tracker_id': $("#tracker_select option:selected").val(),
         'time': $("#time_tracking_select option:selected").val(),
         'range_integer': $("#range_field").val(),
@@ -32,7 +32,7 @@ $(function() {
       data: {
         'chart_type': $("#chart_type_select option:selected").val(),
         'name': $("#name_field").val(),
-        'public': $("#public_checkbox").is(":checked"),
+        'is_public': $("#public_checkbox").is(":checked"),
         'tracker_id': $("#tracker_select option:selected").val(),
         'time': $("#time_tracking_select option:selected").val(),
         'range_integer': $("#range_field").val(),
@@ -58,7 +58,7 @@ $(function() {
       data: {
         'chart_type': $("#chart_type_select option:selected").val(),
         'name': $("#name_field").val(),
-        'public': $("#public_checkbox").is(":checked"),
+        'is_public': $("#public_checkbox").is(":checked"),
         'tracker_id': $("#tracker_select option:selected").val(),
         'time': $("#time_tracking_select option:selected").val(),
         'range_integer': $("#range_field").val(),

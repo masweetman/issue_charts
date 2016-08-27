@@ -28,3 +28,7 @@ de:
   permission_create_public_charts: Öffentliche Diagramme erstellen
   permission_edit_charts: Diagramme bearbeiten
   permission_edit_public_charts: Öffentliche Diagramme bearbeiten
+  field_range_integer: :label_in_the_past_days
+  field_issue_status: :label_issue_status
+  field_time: :label_time_tracking
+  field_group_by_field: :field_group_by

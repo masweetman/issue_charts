@@ -8,8 +8,8 @@ class ChartsController < ApplicationController
     if !User.current.allowed_to?(:view_charts, @project)
       render_404
     else
-      @my_charts = Chart.where('project_id = ? AND user_id = ? AND public = false', @project.id, User.current.id).order(:name)
-      @public_charts = Chart.where('project_id = ? AND public = true', @project.id).order(:name)
+      @my_charts = Chart.where('project_id = ? AND user_id = ? AND is_public = false', @project.id, User.current.id).order(:name)
+      @public_charts = Chart.where('project_id = ? AND is_public = true', @project.id).order(:name)
     end
   end
 
@@ -55,7 +55,7 @@ class ChartsController < ApplicationController
     params[:tracker_id] ||= @chart.tracker_id.to_s
     params[:chart_type] ||= @chart.chart_type
     params[:group_by_field] ||= @chart.group_by_field
-    params[:public] ||= @chart.public.to_s
+    params[:is_public] ||= @chart.is_public.to_s
     params[:range_integer] ||= @chart.range_integer.to_s
     params[:range_type] ||= @chart.range_type
     params[:time] ||= @chart.time
@@ -117,7 +117,7 @@ class ChartsController < ApplicationController
     params[:tracker_id] = @chart.tracker_id.to_s
     params[:chart_type] = @chart.chart_type
     params[:group_by_field] = @chart.group_by_field
-    params[:public] = @chart.public.to_s
+    params[:is_public] = @chart.is_public.to_s
     params[:range_integer] = @chart.range_integer.to_s
     params[:range_type] = @chart.range_type
     params[:time] = @chart.time
@@ -179,7 +179,7 @@ class ChartsController < ApplicationController
   private
 
     def chart_params
-      params.require(:chart).permit(:project_id, :name, :tracker_id, :chart_type, :group_by_field, :user_id, :public, :range_integer, :range_type, :time, :issue_status)
+      params.require(:chart).permit(:project_id, :name, :tracker_id, :chart_type, :group_by_field, :user_id, :is_public, :range_integer, :range_type, :time, :issue_status)
     end
 
 end

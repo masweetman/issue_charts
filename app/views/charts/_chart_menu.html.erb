@@ -1,4 +1,4 @@
 <div class="contextual">
-  <%= link_to l(:button_edit), edit_chart_path(@chart), :class => 'icon icon-edit' if User.current.allowed_to?(:edit_public_charts, @project) || (User.current.allowed_to?(:edit_charts, @project) && !@chart.public?) %>
-  <%= link_to l(:button_delete), chart_path(@chart), :method => :delete, :data => {:confirm => l(:text_are_you_sure)} ,:class => 'icon icon-del' if User.current.allowed_to?(:edit_public_charts, @project) || (User.current.allowed_to?(:edit_charts, @project) && !@chart.public?) %>
+  <%= link_to l(:button_edit), edit_chart_path(@chart), :class => 'icon icon-edit' if User.current.allowed_to?(:edit_public_charts, @project) || (User.current.allowed_to?(:edit_charts, @project) && !@chart.is_public?) %>
+  <%= link_to l(:button_delete), chart_path(@chart), :method => :delete, :data => {:confirm => l(:text_are_you_sure)} ,:class => 'icon icon-del' if User.current.allowed_to?(:edit_public_charts, @project) || (User.current.allowed_to?(:edit_charts, @project) && !@chart.is_public?) %>
 </div>
