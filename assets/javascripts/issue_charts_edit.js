@@ -11,7 +11,8 @@ $(function() {
         'time': $("#time_tracking_select option:selected").val(),
         'range_integer': $("#range_field").val(),
         'range_type': $("#date_range_type_select option:selected").val(),
-        'group_by_field': $("#group_by_select option:selected").val()
+        'group_by_field': $("#group_by_select option:selected").val(),
+        'issue_status': $("#issue_status_select option:selected").val()
       },
       error: function(jqXHR, textStatus, errorThrown) {
         return console.log("AJAX Error: " + textStatus);
@@ -36,7 +37,8 @@ $(function() {
         'time': $("#time_tracking_select option:selected").val(),
         'range_integer': $("#range_field").val(),
         'range_type': $("#date_range_type_select option:selected").val(),
-        'group_by_field': $("#group_by_select option:selected").val()
+        'group_by_field': $("#group_by_select option:selected").val(),
+        'issue_status': $("#issue_status_select option:selected").val()
       },
       error: function(jqXHR, textStatus, errorThrown) {
         return console.log("AJAX Error: " + textStatus);
@@ -61,7 +63,8 @@ $(function() {
         'time': $("#time_tracking_select option:selected").val(),
         'range_integer': $("#range_field").val(),
         'range_type': $("#date_range_type_select option:selected").val(),
-        'group_by_field': $("#group_by_select option:selected").val()
+        'group_by_field': $("#group_by_select option:selected").val(),
+        'issue_status': $("#issue_status_select option:selected").val()
       },
       error: function(jqXHR, textStatus, errorThrown) {
         return console.log("AJAX Error: " + textStatus);

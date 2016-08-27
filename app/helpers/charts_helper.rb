@@ -35,6 +35,14 @@ module ChartsHelper
     else
       scope = Issue.where('issues.project_id IN (?) AND issues.tracker_id = ? AND issues.created_on > ?', chart.projects, chart.tracker_id, start_date)
     end
+
+    if chart.issue_status == 'o'
+      scope = scope.joins(:status).where('issue_statuses.is_closed = ?', false)
+    elsif chart.issue_status == 'c'
+      scope = scope.joins(:status).where('issue_statuses.is_closed = ?', true)
+    end
+
+    scope
   end
 
   def render_link_objects(chart)
@@ -98,11 +106,21 @@ module ChartsHelper
     begin
       start_date = chart_start_date(chart)
       if ('0' + chart.group_by_field.to_s).to_i > 0
-        scope = CustomValue.where("customized_type = ? AND custom_field_id = ?", 'Issue', chart.group_by_field).joins("INNER JOIN issues ON (custom_values.customized_id = issues.id)").where("project_id IN (?) AND tracker_id = ? AND created_on > ?", chart.projects, chart.tracker_id, start_date)
+        scope = CustomValue.where("customized_type = ? AND custom_field_id = ?", 'Issue', chart.group_by_field).joins("INNER JOIN issues ON (custom_values.customized_id = issues.id)").where("issues.project_id IN (?) AND issues.tracker_id = ? AND issues.created_on > ?", chart.projects, chart.tracker_id, start_date)
+
+        if chart.issue_status == 'o'
+          # get open issues (future)
+        elsif chart.issue_status == 'c'
+          # get closed issues (future)
+        end
+
         group = 'value'
+
       else
+
         scope = issue_scope(chart)
         group = chart.group_by_field
+
       end
 
       if !chart.predefined?

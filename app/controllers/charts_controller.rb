@@ -33,8 +33,11 @@ class ChartsController < ApplicationController
     
     @range_type_options = { l(:label_day_plural) => 'days', l(:label_month_plural) => 'months', l(:label_year_plural) => 'years' }
     
-    unless predefined_types.values.include?(params[:chart_type])
+    if !predefined_types.values.include?(params[:chart_type])
+      @issue_status_options = { l(:label_open_issues_plural) => 'o', l(:label_closed_issues_plural) => 'c', l(:label_total) => '*' }
       @time_options = { l(:field_estimated_hours) => 'estimated_hours', l(:label_spent_time) => 'spent_hours' }
+    else
+      @issue_status_options = { l(:label_total) => '*' }
     end
 
     unless params[:chart_type].to_s.empty? || predefined_types.values.include?(params[:chart_type])
@@ -58,6 +61,7 @@ class ChartsController < ApplicationController
     params[:range_integer] ||= @chart.range_integer.to_s
     params[:range_type] ||= @chart.range_type
     params[:time] ||= @chart.time
+    params[:issue_status] ||= @chart.issue_status
 
     set_options
     
@@ -119,6 +123,7 @@ class ChartsController < ApplicationController
     params[:range_integer] = @chart.range_integer.to_s
     params[:range_type] = @chart.range_type
     params[:time] = @chart.time
+    params[:issue_status] = @chart.issue_status
 
     @chart_type_options = { l(:label_line_chart) => 'Line',
       l(:label_pie_chart) => 'Pie',
@@ -131,8 +136,11 @@ class ChartsController < ApplicationController
     
     @range_type_options = { l(:label_day_plural) => 'days', l(:label_month_plural) => 'months', l(:label_year_plural) => 'years' }
     
-    unless predefined_types.values.include?(params[:chart_type])
+    if !predefined_types.values.include?(params[:chart_type])
+      @issue_status_options = { l(:label_open_issues_plural) => 'o', l(:label_closed_issues_plural) => 'c', l(:label_total) => '*' }
       @time_options = { l(:field_estimated_hours) => 'estimated_hours', l(:label_spent_time) => 'spent_hours' }
+    else
+      @issue_status_options = { l(:label_total) => '*' }
     end
 
     unless params[:chart_type].to_s.empty? || predefined_types.values.include?(params[:chart_type])
@@ -175,7 +183,7 @@ class ChartsController < ApplicationController
   private
 
     def chart_params
-      params.require(:chart).permit(:project_id, :name, :tracker_id, :chart_type, :group_by_field, :user_id, :public, :range_integer, :range_type, :time)
+      params.require(:chart).permit(:project_id, :name, :tracker_id, :chart_type, :group_by_field, :user_id, :public, :range_integer, :range_type, :time, :issue_status)
     end
 
 end

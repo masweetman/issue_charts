@@ -28,6 +28,13 @@
     <%= f.text_field :range_integer, :required => true, value: params[:range_integer], :id => 'range_field' %>
     <%= f.select :range_type, @range_type_options, { selected: params[:range_type], include_blank: false }, :id => 'date_range_type_select' %>
   </p>
+
+  <% unless @issue_status_options.nil? %>
+    <p>
+      <%= f.label l(:label_issue_status) %>
+      <%= f.select :issue_status, @issue_status_options, { selected: params[:issue_status], include_blank: false }, :id => 'issue_status_select' %>
+    </p>
+  <% end %>
   
   <% unless @time_options.nil? %>
     <p>
