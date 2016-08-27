@@ -36,8 +36,6 @@ class ChartsController < ApplicationController
     if !predefined_types.values.include?(params[:chart_type])
       @issue_status_options = { l(:label_open_issues_plural) => 'o', l(:label_closed_issues_plural) => 'c', l(:label_total) => '*' }
       @time_options = { l(:field_estimated_hours) => 'estimated_hours', l(:label_spent_time) => 'spent_hours' }
-    else
-      @issue_status_options = { l(:label_total) => '*' }
     end
 
     unless params[:chart_type].to_s.empty? || predefined_types.values.include?(params[:chart_type])
@@ -139,8 +137,6 @@ class ChartsController < ApplicationController
     if !predefined_types.values.include?(params[:chart_type])
       @issue_status_options = { l(:label_open_issues_plural) => 'o', l(:label_closed_issues_plural) => 'c', l(:label_total) => '*' }
       @time_options = { l(:field_estimated_hours) => 'estimated_hours', l(:label_spent_time) => 'spent_hours' }
-    else
-      @issue_status_options = { l(:label_total) => '*' }
     end
 
     unless params[:chart_type].to_s.empty? || predefined_types.values.include?(params[:chart_type])

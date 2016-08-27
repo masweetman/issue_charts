@@ -133,13 +133,14 @@ module ChartsHelper
         group = chart.group_by_field
       end
 
-      if chart.issue_status == 'o'
-        scope = scope.joins(:status).where('issue_statuses.is_closed = ?', false)
-      elsif chart.issue_status == 'c'
-        scope = scope.joins(:status).where('issue_statuses.is_closed = ?', true)
-      end
-
       if !chart.predefined?
+      
+        if chart.issue_status == 'o'
+          scope = scope.joins(:status).where('issue_statuses.is_closed = ?', false)
+        elsif chart.issue_status == 'c'
+          scope = scope.joins(:status).where('issue_statuses.is_closed = ?', true)
+        end
+        
         chart_code = ''
         if chart.chart_type == 'Line'
           chart_code = 'line_chart'
