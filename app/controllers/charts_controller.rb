@@ -29,7 +29,7 @@ class ChartsController < ApplicationController
       l(:label_area_chart) => 'Area'}.merge(predefined_types)
     
     @tracker_options = { l(:label_tracker_all) => 0 }
-    Tracker.order(:name).map{ |t| @tracker_options[t.name] = t.id.to_s }
+    @project.trackers.order(:name).map{ |t| @tracker_options[t.name] = t.id.to_s }
     
     @range_type_options = { l(:label_day_plural) => 'days', l(:label_month_plural) => 'months', l(:label_year_plural) => 'years' }
     
@@ -94,7 +94,7 @@ class ChartsController < ApplicationController
       l(:label_area_chart) => 'Area'}.merge(predefined_types)
     
     @tracker_options = { l(:label_tracker_all) => 0 }
-    Tracker.order(:name).map{ |t| @tracker_options[t.name] = t.id.to_s }
+    @project.trackers.order(:name).map{ |t| @tracker_options[t.name] = t.id.to_s }
     
     @range_type_options = { l(:label_day_plural) => 'days', l(:label_month_plural) => 'months', l(:label_year_plural) => 'years' }
   end
@@ -145,7 +145,7 @@ class ChartsController < ApplicationController
       l(:label_area_chart) => 'Area'}.merge(predefined_types)
     
     @tracker_options = { l(:label_tracker_all) => 0 }
-    Tracker.order(:name).map{ |t| @tracker_options[t.name] = t.id.to_s }
+    @project.trackers.order(:name).map{ |t| @tracker_options[t.name] = t.id.to_s }
     
     @range_type_options = { l(:label_day_plural) => 'days', l(:label_month_plural) => 'months', l(:label_year_plural) => 'years' }
     
