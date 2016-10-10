@@ -49,7 +49,7 @@ module ChartsHelper
     if ('0' + chart.group_by_field.to_s).to_i > 0
       objects = scope.map{ |i| i.custom_field_value(chart.group_by_field.to_i) }.uniq.compact.sort
       if CustomField.find(chart.group_by_field).multiple
-        objects = objects.flatten
+        objects = objects.flatten.uniq.compact.sort
       end
     else
       objects = scope.map{ |i| eval("i." + chart.group_by_field.to_s) }.uniq.compact.sort unless chart.group_by_field.to_s == 'created_on'
