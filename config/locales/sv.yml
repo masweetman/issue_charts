@@ -1,0 +1,37 @@
+sv:
+  label_charts: Diagram
+  field_chart_type: Diagramtyp
+  label_month_plural: månader
+  label_year_plural: år
+  label_n_days:
+    one: "senaste dagen"
+    other: "senaste %{count} dagarna"
+  label_n_months:
+    one: "senaste månaden"
+    other: "senaste %{count} månaderna"
+  label_n_years:
+    one: "senaste året"
+    other: "senaste %{count} åren"
+  label_tracker_all: Alla ärendetyper
+  label_new_chart: Nytt diagram
+  label_my_charts: Mina diagram
+  label_public_charts: Publika diagram
+  label_line_chart: Linjediagram
+  label_pie_chart: Tårtdiagram
+  label_column_chart: Spaltdiagram
+  label_bar_chart: Stapeldiagram
+  label_area_chart: Ytdiagram
+  label_created_vs_closed_issues: Skapade kontra stängda ärenden
+
+  permission_view_charts: Visa diagram
+  permission_create_charts: Skapa diagram
+  permission_create_public_charts: Skapa publika diagram
+  permission_edit_charts: Redigera diagram
+  permission_edit_public_charts: Redigera publika diagram
+  
+  #references
+  field_range_integer: :label_in_the_past_days
+  field_issue_status: :label_issue_status
+  field_time: :label_time_tracking
+  field_group_by_field: :field_group_by
+  
