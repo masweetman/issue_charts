@@ -1,0 +1,37 @@
+it:
+  label_charts: Grafici
+  field_chart_type: Tipo di Grafico
+  label_month_plural: mesi
+  label_year_plural: anni
+  label_n_days:
+    one: "ultimo giorno"
+    other: "ultimi %{count} giorni"
+  label_n_months:
+    one: "ultimo mese"
+    other: "ultimi %{count} mesi"
+  label_n_years:
+    one: "ultimo anno"
+    other: "ultimi %{count} anni"
+  label_tracker_all: Tutti i tracker
+  label_new_chart: Nuovo grafico
+  label_my_charts: I miei grafici
+  label_public_charts: Grafici pubblici
+  label_line_chart: a linee
+  label_pie_chart: a torta
+  label_column_chart: a colonne
+  label_bar_chart: a barre
+  label_area_chart: ad area
+  label_created_vs_closed_issues: Segnalazioni aperte vs chiuse
+
+  permission_view_charts: Visualizza grafici
+  permission_create_charts: Crea grafici
+  permission_create_public_charts: Crea grafici pubblici
+  permission_edit_charts: Modifica grafici
+  permission_edit_public_charts: Modifica grafici pubblici
+  
+  #references
+  field_range_integer: :label_in_the_past_days
+  field_issue_status: :label_issue_status
+  field_time: :label_time_tracking
+  field_group_by_field: :field_group_by
+  

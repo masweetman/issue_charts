@@ -28,6 +28,8 @@ en:
   permission_create_public_charts: Create public charts
   permission_edit_charts: Edit charts
   permission_edit_public_charts: Edit public charts
+  
+  #references
   field_range_integer: :label_in_the_past_days
   field_issue_status: :label_issue_status
   field_time: :label_time_tracking
