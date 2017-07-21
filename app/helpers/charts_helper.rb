@@ -176,7 +176,7 @@ module ChartsHelper
           created_issues += 1
           created_series[issue.created_on.to_date] = created_issues
         end
-        scope.where('closed_on > ?', 0).order(:closed_on).each do |issue|
+        scope.where('closed_on IS NOT NULL').order(:closed_on).each do |issue|
           closed_issues += 1
           closed_series[issue.closed_on.to_date] = closed_issues
         end
