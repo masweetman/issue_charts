@@ -19,7 +19,18 @@ module ChartsHelper
   end
 
   def chart_start_date(chart)
-    eval("Date.today - chart.range_integer." + chart.range_type) unless chart.range_integer.nil? || chart.range_type.nil?
+    unless chart.range_integer.nil? || chart.range_type.nil?
+      start_date = Date.today
+      if chart.range_type == "days"
+        start_date = Date.today - chart.range_integer.days
+      elsif chart.range_type == "months"
+        start_date = Date.today - chart.range_integer.months
+      elsif chart.range_type == "years"
+        start_date = Date.today - chart.range_integer.years
+      end
+      start_date
+    end
+
   end
   
   def all_project_children(project)
@@ -49,7 +60,17 @@ module ChartsHelper
     if ('0' + chart.group_by_field.to_s).to_i > 0
       objects = scope.map{ |i| i.custom_field_value(chart.group_by_field.to_i) }.flatten.uniq.compact.sort
     else
-      objects = scope.map{ |i| eval("i." + chart.group_by_field.to_s) }.uniq.compact.sort unless chart.group_by_field.to_s == 'created_on'
+      if chart.group_by_field.to_s == 'tracker'
+        objects = scope.map{ |i| i.tracker }.uniq.compact.sort
+      elsif chart.group_by_field.to_s == 'category'
+        objects = scope.map{ |i| i.category }.uniq.compact.sort
+      elsif chart.group_by_field.to_s == 'status'
+        objects = scope.map{ |i| i.status }.uniq.compact.sort
+      elsif chart.group_by_field.to_s == 'assigned_to'
+        objects = scope.map{ |i| i.assigned_to }.uniq.compact.sort
+      elsif chart.group_by_field.to_s == 'author'
+        objects = scope.map{ |i| i.author }.uniq.compact.sort
+      end      
     end
     return objects
   end
@@ -143,28 +164,85 @@ module ChartsHelper
         
         chart_code = ''
         if chart.chart_type == 'Line'
-          chart_code = 'line_chart'
+          if group == 'created_on'
+            if chart.time.to_s.empty?
+              line_chart scope.group_by_day(group).count
+            else
+              line_chart scope.group_by_day(group).sum(:estimated_hours) if chart.time == 'estimated_hours'
+              line_chart scope.joins(:time_entries).group_by_day(group).sum(:hours) if chart.time == 'spent_hours'
+            end
+          else
+            if chart.time.to_s.empty?
+              line_chart scope.group(group).count
+            else
+              line_chart scope.group(group).sum(:estimated_hours) if chart.time == 'estimated_hours'
+              line_chart scope.joins(:time_entries).group(group).sum(:hours) if chart.time == 'spent_hours'
+            end
+          end
         elsif chart.chart_type == 'Pie'
-          chart_code = 'pie_chart'
+          if group == 'created_on'
+            if chart.time.to_s.empty?
+              pie_chart scope.group_by_day(group).count
+            else
+              pie_chart scope.group_by_day(group).sum(:estimated_hours) if chart.time == 'estimated_hours'
+              pie_chart scope.joins(:time_entries).group_by_day(group).sum(:hours) if chart.time == 'spent_hours'
+            end
+          else
+            if chart.time.to_s.empty?
+              pie_chart scope.group(group).count
+            else
+              pie_chart scope.group(group).sum(:estimated_hours) if chart.time == 'estimated_hours'
+              pie_chart scope.joins(:time_entries).group(group).sum(:hours) if chart.time == 'spent_hours'
+            end
+          end
         elsif chart.chart_type == 'Column'
-          chart_code = 'column_chart'
+          if group == 'created_on'
+            if chart.time.to_s.empty?
+              column_chart scope.group_by_day(group).count
+            else
+              column_chart scope.group_by_day(group).sum(:estimated_hours) if chart.time == 'estimated_hours'
+              column_chart scope.joins(:time_entries).group_by_day(group).sum(:hours) if chart.time == 'spent_hours'
+            end
+          else
+            if chart.time.to_s.empty?
+              column_chart scope.group(group).count
+            else
+              column_chart scope.group(group).sum(:estimated_hours) if chart.time == 'estimated_hours'
+              column_chart scope.joins(:time_entries).group(group).sum(:hours) if chart.time == 'spent_hours'
+            end
+          end
         elsif chart.chart_type == 'Bar'
-          chart_code = 'bar_chart'
+          if group == 'created_on'
+            if chart.time.to_s.empty?
+              bar_chart scope.group_by_day(group).count
+            else
+              bar_chart scope.group_by_day(group).sum(:estimated_hours) if chart.time == 'estimated_hours'
+              bar_chart scope.joins(:time_entries).group_by_day(group).sum(:hours) if chart.time == 'spent_hours'
+            end
+          else
+            if chart.time.to_s.empty?
+              bar_chart scope.group(group).count
+            else
+              bar_chart scope.group(group).sum(:estimated_hours) if chart.time == 'estimated_hours'
+              bar_chart scope.joins(:time_entries).group(group).sum(:hours) if chart.time == 'spent_hours'
+            end
+          end
         elsif chart.chart_type == 'Area'
-          chart_code = 'area_chart'
-        end
-        group_code = ''
-        if group == 'created_on'
-          group_code = 'group_by_day'
-        else
-          group_code = 'group'
-        end
-        
-        if chart.time.to_s.empty?
-          code = chart_code + ' scope.' + group_code + '(group).count'
-        else
-          code = chart_code + ' scope.' + group_code + '(group).' + 'sum(:estimated_hours)' if chart.time == 'estimated_hours'
-          code = chart_code + ' scope.joins(:time_entries).' + group_code + '(group).' + 'sum(:hours)' if chart.time == 'spent_hours'
+          if group == 'created_on'
+            if chart.time.to_s.empty?
+              area_chart scope.group_by_day(group).count
+            else
+              area_chart scope.group_by_day(group).sum(:estimated_hours) if chart.time == 'estimated_hours'
+              area_chart scope.joins(:time_entries).group_by_day(group).sum(:hours) if chart.time == 'spent_hours'
+            end
+          else
+            if chart.time.to_s.empty?
+              area_chart scope.group(group).count
+            else
+              area_chart scope.group(group).sum(:estimated_hours) if chart.time == 'estimated_hours'
+              area_chart scope.joins(:time_entries).group(group).sum(:hours) if chart.time == 'spent_hours'
+            end
+          end
         end
 
       elsif chart.chart_type == 'Created vs Closed Issues'
@@ -192,10 +270,9 @@ module ChartsHelper
           end
         end
 
-        code = "area_chart [ { name: 'Created Issues', data: created_series }, { name: 'Closed Issues', data: closed_series } ], stacked: false, max: created_issues*1.1, colors: ['red', '#0a0']"
+        area_chart [ { name: 'Created Issues', data: created_series }, { name: 'Closed Issues', data: closed_series } ], stacked: false, max: created_issues*1.1, colors: ['red', '#0a0']
       end
-
-      eval code
+      
     rescue Exception => e
       flash[:error] = "Error loading chart '" + chart.name + "'. " + e.message
       return ''

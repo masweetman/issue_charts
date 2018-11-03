@@ -8,6 +8,7 @@ This plugin provides the capability to create beautiful charts and graphs for yo
 * Run <code>bundle install</code>
 * Run <code>rake redmine:plugins:migrate RAILS_ENV=production</code>
 * Restart Redmine
+* Set Chart permissions in Redmine Administration
 
 == To use groupdate
 

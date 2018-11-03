@@ -3,7 +3,7 @@ Redmine::Plugin.register :issue_charts do
   name 'Issue Charts plugin'
   author 'Mike Sweetman'
   description 'Provides the capability to create charts and graphs for project issues.'
-  version '1.3.0'
+  version '2.0.0'
   url 'https://github.com/masweetman/issue_charts'
   author_url 'https://github.com/masweetman'
 
