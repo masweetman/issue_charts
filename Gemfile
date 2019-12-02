@@ -1,2 +1,2 @@
-gem 'chartkick', '~> 2.3.5'
+gem 'chartkick', '>= 3.3.0'
 gem 'groupdate'
