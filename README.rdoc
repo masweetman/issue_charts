@@ -1,3 +1,6 @@
+= ISSUE CHARTS IS DEPRECATED
+issue_charts not compatible with chartkick v3 or greater. Issue_charts is deprecated until it is revised to work with chartkick v3.
+
 = Issue Charts plug-in
 
 This plugin provides the capability to create beautiful charts and graphs for your issues using Chartkick (http://chartkick.com). Create issue visualizations based on standard fields as well as custom fields!
